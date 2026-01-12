@@ -36,11 +36,15 @@ def import_data(data_file=None):
     print(f"\n[IMPORT] Importing data from: {data_file}")
     print("[WARNING] This will add data to your production database!")
     
-    # Confirm
-    response = input("\nDo you want to continue? (yes/no): ").strip().lower()
-    if response not in ['yes', 'y']:
-        print("[CANCELLED] Import cancelled.")
-        sys.exit(0)
+    # Auto-confirm if running in non-interactive mode (like startup script)
+    if not sys.stdin.isatty():
+        print("[AUTO-CONFIRM] Running in non-interactive mode. Proceeding with import...")
+    else:
+        # Confirm
+        response = input("\nDo you want to continue? (yes/no): ").strip().lower()
+        if response not in ['yes', 'y']:
+            print("[CANCELLED] Import cancelled.")
+            sys.exit(0)
     
     try:
         print("\n[IMPORTING] Importing data...")

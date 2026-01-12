@@ -6,7 +6,7 @@ services:
     plan: free  # Change to 'starter' or 'standard' for production
     region: oregon  # Options: oregon, frankfurt, singapore, mumbai, tokyo
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: gunicorn nayi_umeed.wsgi:application
+    startCommand: chmod +x startup.sh && ./startup.sh
     envVars:
       # Django Settings
       - key: PYTHON_VERSION
