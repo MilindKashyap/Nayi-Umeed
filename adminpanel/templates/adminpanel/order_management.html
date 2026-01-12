@@ -1,0 +1,111 @@
+{% extends "adminpanel/base.html" %}
+{% block admin_content %}
+<div>
+  <div style="margin-bottom: var(--spacing-2xl);">
+    <h1 style="margin-bottom: var(--spacing-sm);">Order Management</h1>
+    <p style="color: var(--gray-600);">View and manage all orders with buyer and shipping details</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4" style="gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl);">
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Total Orders</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--gray-900);">{{ total_orders }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Pending</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--warning);">{{ pending_orders }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Delivered</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--secondary);">{{ delivered_orders }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Cancelled</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--error);">{{ cancelled_orders }}</div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card" style="margin-bottom: var(--spacing-xl);">
+    <form method="get" style="display: flex; gap: var(--spacing-md); align-items: flex-end; flex-wrap: wrap;">
+      <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
+        <label for="status" class="form-label">Filter by Status</label>
+        <select name="status" id="status" class="form-select">
+          <option value="">All Statuses</option>
+          {% for value, label in status_choices %}
+            <option value="{{ value }}" {% if current_status_filter == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Apply Filter</button>
+      {% if current_status_filter %}
+        <a href="{% url 'adminpanel:order_management' %}" class="btn btn-secondary">Clear</a>
+      {% endif %}
+    </form>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead style="background-color: var(--gray-50); border-bottom: 2px solid var(--gray-200);">
+          <tr>
+            <th style="padding: var(--spacing-md); text-align: left; font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-700);">Order ID</th>
+            <th style="padding: var(--spacing-md); text-align: left; font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-700);">Device</th>
+            <th style="padding: var(--spacing-md); text-align: left; font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-700);">Buyer</th>
+            <th style="padding: var(--spacing-md); text-align: left; font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-700);">Shipping Address</th>
+            <th style="padding: var(--spacing-md); text-align: left; font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-700);">Status</th>
+            <th style="padding: var(--spacing-md); text-align: left; font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-700);">Date</th>
+            <th style="padding: var(--spacing-md); text-align: left; font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-700);">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr style="border-bottom: 1px solid var(--gray-200); transition: background-color 0.2s ease;" onmouseover="this.style.backgroundColor='var(--gray-50)'" onmouseout="this.style.backgroundColor=''">
+              <td style="padding: var(--spacing-md);">
+                <div style="font-weight: 600; color: var(--gray-900);">#{{ order.id }}</div>
+                <div style="font-size: var(--font-size-xs); color: var(--gray-500);">₹{{ order.listing.price }}</div>
+              </td>
+              <td style="padding: var(--spacing-md);">
+                <div style="font-weight: 500; color: var(--gray-900);">{{ order.listing.device.title }}</div>
+                <div style="font-size: var(--font-size-xs); color: var(--gray-500);">{{ order.listing.device.listing_id }}</div>
+              </td>
+              <td style="padding: var(--spacing-md);">
+                <div style="font-weight: 500; color: var(--gray-900);">{{ order.buyer.get_full_name|default:order.buyer.username }}</div>
+                <div style="font-size: var(--font-size-xs); color: var(--gray-500);">{{ order.buyer.email }}</div>
+                <div style="font-size: var(--font-size-xs); color: var(--gray-500);">{{ order.buyer.phone_number }}</div>
+              </td>
+              <td style="padding: var(--spacing-md); max-width: 300px;">
+                <div style="font-size: var(--font-size-sm); color: var(--gray-700); line-height: var(--line-height-base);">
+                  {{ order.shipping_address|truncatewords:15 }}
+                </div>
+              </td>
+              <td style="padding: var(--spacing-md);">
+                <span class="badge {% if order.status == 'delivered' %}badge-success{% elif order.status == 'cancelled' %}badge-error{% elif order.status == 'in_transit' %}badge-primary{% else %}badge-warning{% endif %}">
+                  {{ order.get_status_display }}
+                </span>
+              </td>
+              <td style="padding: var(--spacing-md);">
+                <div style="font-size: var(--font-size-sm); color: var(--gray-700);">{{ order.created_at|date:"M d, Y" }}</div>
+                <div style="font-size: var(--font-size-xs); color: var(--gray-500);">{{ order.created_at|time:"g:i A" }}</div>
+              </td>
+              <td style="padding: var(--spacing-md);">
+                <a href="{% url 'adminpanel:order_detail' order.id %}" class="btn btn-primary" style="padding: 8px 16px; font-size: var(--font-size-sm); min-width: auto; min-height: auto;">
+                  View Details
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" style="padding: var(--spacing-3xl); text-align: center; color: var(--gray-500);">
+                No orders found.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bg-white shadow rounded p-6 space-y-4">
+  <h1 class="text-xl font-semibold">Order #{{ order.id }}</h1>
+  <p class="text-sm text-slate-600">Device: {{ order.listing.device.title }}</p>
+  <p class="text-sm text-slate-600">Current status: <span id="order-status">{{ order.get_status_display }}</span></p>
+  <h3 class="font-semibold">History</h3>
+  <ul id="history" class="space-y-1">
+    {% for item in order.history.all %}
+      <li class="text-sm text-slate-600">{{ item.changed_at }} — {{ item.get_status_display }} {{ item.note }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function refreshStatus() {
+  fetch("{% url 'marketplace:order_status_api' order.id %}")
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('order-status').innerText = data.status;
+      const historyList = document.getElementById('history');
+      historyList.innerHTML = '';
+      data.history.forEach(h => {
+        const li = document.createElement('li');
+        li.className = "text-sm text-slate-600";
+        li.innerText = `${h.changed_at} — ${h.status} ${h.note ?? ''}`;
+        historyList.appendChild(li);
+      });
+    });
+}
+setInterval(refreshStatus, 10000);
+</script>
+{% endblock %}
+

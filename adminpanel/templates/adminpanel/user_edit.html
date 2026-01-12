@@ -1,0 +1,65 @@
+{% extends "adminpanel/base.html" %}
+{% block admin_content %}
+<div style="max-width: 720px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-xl);">
+    <div>
+      <h1 style="margin-bottom: var(--spacing-xs);">Edit User</h1>
+      <p style="color: var(--gray-600);">{{ user.get_full_name|default:user.username }} (@{{ user.username }})</p>
+    </div>
+    <a href="{% url 'adminpanel:user_management' %}" style="color: var(--primary); text-decoration: none;">← Back</a>
+  </div>
+
+  <div class="card" style="margin-bottom: var(--spacing-xl);">
+    <div class="card-header">
+      <h3 style="margin: 0;">User Information</h3>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-lg);">
+      <div>
+        <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Email</div>
+        <div style="font-weight: 600; color: var(--gray-900);">{{ user.email }}</div>
+      </div>
+      <div>
+        <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Phone</div>
+        <div style="font-weight: 600; color: var(--gray-900);">{{ user.phone_number }}</div>
+      </div>
+      <div>
+        <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Date Joined</div>
+        <div style="font-weight: 600; color: var(--gray-900);">{{ user.date_joined|date:"M d, Y" }}</div>
+      </div>
+      <div>
+        <div style="font-size: var(--font-size-sm); color: var(--gray-600);">OTP Verified</div>
+        <div style="font-weight: 600; color: var(--gray-900);">{% if user.otp_verified %}Yes{% else %}No{% endif %}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 style="margin: 0;">Update Access</h3>
+    </div>
+    <form method="post" class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-lg);">
+      {% csrf_token %}
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Role</label>
+        <select name="role" class="form-control" required>
+          {% for value, label in roles %}
+            <option value="{{ value }}" {% if user.role == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Account Status</label>
+        <div style="display: flex; align-items: center; gap: var(--spacing-sm); padding: 0.75rem 1rem; border: 1px solid var(--gray-200); border-radius: var(--radius-md);">
+          <input type="checkbox" name="is_active" id="is_active" {% if user.is_active %}checked{% endif %}>
+          <label for="is_active" style="margin: 0; color: var(--gray-700);">Active account</label>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom: 0; grid-column: 1 / -1; display: flex; gap: var(--spacing-md);">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+        <a href="{% url 'adminpanel:user_management' %}" class="btn btn-outline" style="flex: 1; text-align: center; text-decoration: none;">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,101 @@
+{% extends "adminpanel/base.html" %}
+{% block admin_content %}
+<div style="max-width: 800px;">
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-xl); gap: var(--spacing-md); flex-wrap: wrap;">
+    <div>
+      <h1 style="margin-bottom: var(--spacing-xs);">Device Approval</h1>
+      <div style="color: var(--gray-600); font-size: var(--font-size-sm);">
+        {{ device.title }} ({{ device.listing_id }})
+      </div>
+    </div>
+    <a href="{% url 'adminpanel:device_management' %}" style="color: var(--primary); text-decoration: none; font-size: var(--font-size-sm);">
+      ← Back to Device Management
+    </a>
+  </div>
+
+  <div class="card" style="margin-bottom: var(--spacing-xl);">
+    <!-- Device Info Summary -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+      <div>
+        <div style="font-size: var(--font-size-xs); text-transform: uppercase; color: var(--gray-500); letter-spacing: 0.08em; margin-bottom: var(--spacing-xs);">
+          Category
+        </div>
+        <div style="font-weight: 600; color: var(--gray-900);">{{ device.get_category_display }}</div>
+      </div>
+      <div>
+        <div style="font-size: var(--font-size-xs); text-transform: uppercase; color: var(--gray-500); letter-spacing: 0.08em; margin-bottom: var(--spacing-xs);">
+          Condition
+        </div>
+        <div style="font-weight: 600; color: var(--gray-900);">{{ device.get_condition_display }}</div>
+      </div>
+      <div>
+        <div style="font-size: var(--font-size-xs); text-transform: uppercase; color: var(--gray-500); letter-spacing: 0.08em; margin-bottom: var(--spacing-xs);">
+          Current Status
+        </div>
+        <span class="badge badge-primary">{{ device.get_status_display }}</span>
+      </div>
+      <div>
+        <div style="font-size: var(--font-size-xs); text-transform: uppercase; color: var(--gray-500); letter-spacing: 0.08em; margin-bottom: var(--spacing-xs);">
+          Approval State
+        </div>
+        <span class="badge {% if device.admin_approval_status == 'approved' %}badge-success{% elif device.admin_approval_status == 'rejected' %}badge-error{% elif device.admin_approval_status == 'on_hold' %}badge-warning{% else %}badge-secondary{% endif %}">
+          {{ device.get_admin_approval_status_display }}
+        </span>
+      </div>
+    </div>
+
+    {% if device.description %}
+      <div style="margin-top: var(--spacing-md);">
+        <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-800); margin-bottom: var(--spacing-xs);">
+          Donor Description
+        </div>
+        <div style="background-color: var(--gray-50); border-radius: var(--radius-md); padding: var(--spacing-md); color: var(--gray-700); line-height: var(--line-height-base);">
+          {{ device.description }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Approval Form -->
+  <div class="card">
+    <div class="card-header">
+      <h3 style="margin: 0;">Approval Decision</h3>
+    </div>
+    <form method="post" style="display: grid; grid-template-columns: 1fr; gap: var(--spacing-lg);">
+      {% csrf_token %}
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">{{ form.approval_status.label }}</label>
+        {{ form.approval_status }}
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Manual Status Override (Optional)</label>
+        <p style="font-size: var(--font-size-xs); color: var(--gray-500); margin-bottom: var(--spacing-xs);">
+          Override device lifecycle status if this approval should move the device forward.
+        </p>
+        {{ form.status_override }}
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">{{ form.admin_notes.label }}</label>
+        {{ form.admin_notes }}
+        <p style="font-size: var(--font-size-xs); color: var(--gray-500); margin-top: var(--spacing-xs);">
+          Add clear reasoning for approval / rejection. This helps in audits and partner communication.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-md); flex-wrap: wrap;">
+        <button type="submit" class="btn btn-primary" style="min-width: 160px;">
+          Save Decision
+        </button>
+        <a href="{% url 'adminpanel:device_management' %}" class="btn btn-secondary" style="min-width: 140px; text-align: center; text-decoration: none;">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

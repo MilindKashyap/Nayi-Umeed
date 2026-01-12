@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% block title %}{{ listing.device.title }} - Marketplace - Nayi Umeed{% endblock %}
+{% block content %}
+<div class="container py-8">
+  <!-- Back Navigation -->
+  <div class="mb-6">
+    <a href="{% url 'marketplace:public_listings' %}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Back to Marketplace
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3" style="gap: var(--spacing-xl);">
+    <!-- Left Column: Images and Details -->
+    <div class="lg:col-span-2">
+      <!-- Image Gallery -->
+      {% if device.images.all %}
+        <div class="card" style="margin-bottom: var(--spacing-xl); padding: 0; overflow: hidden;">
+          <div style="position: relative; width: 100%; aspect-ratio: 16/9; background: var(--gray-100);">
+            {% with device.images.first as main_image %}
+              <img id="mainImage" src="{{ main_image.image.url }}" 
+                   alt="{{ device.title }}" 
+                   style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+            {% endwith %}
+          </div>
+          {% if device.images.count > 1 %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: var(--spacing-sm); padding: var(--spacing-md); background: var(--gray-50);">
+              {% for img in device.images.all %}
+                <div onclick="changeMainImage('{{ img.image.url }}')" 
+                     style="aspect-ratio: 1; border: 2px solid var(--gray-200); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; transition: border-color 0.2s ease;"
+                     onmouseover="this.style.borderColor='var(--primary)'"
+                     onmouseout="this.style.borderColor='var(--gray-200)'">
+                  <img src="{{ img.image.url }}" 
+                       alt="Thumbnail {{ forloop.counter }}" 
+                       style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="card" style="margin-bottom: var(--spacing-xl); padding: var(--spacing-3xl); text-align: center; background: var(--gray-50);">
+          <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color: var(--gray-400); margin: 0 auto var(--spacing-md);">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          <p style="color: var(--gray-500); font-size: var(--font-size-base);">No images available</p>
+        </div>
+      {% endif %}
+
+      <!-- Device Information -->
+      <div class="card" style="margin-bottom: var(--spacing-xl);">
+        <h2 style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Device Information
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Category</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+              {{ device.get_category_display }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Condition</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+              {{ device.get_condition_display }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Listing ID</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500; font-family: monospace;">
+              {{ device.listing_id }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Status</div>
+            <div>
+              <span class="badge {% if device.status == 'certified' or device.status == 'listed' %}badge-success{% elif device.status == 'allocated' %}badge-primary{% else %}badge-secondary{% endif %}">
+                {{ device.get_status_display }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {% if device.description %}
+          <div style="border-top: 1px solid var(--gray-200); padding-top: var(--spacing-lg);">
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Description</div>
+            <div style="color: var(--gray-700); line-height: var(--line-height-base); font-size: var(--font-size-base);">
+              {{ device.description|linebreaks }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Device History Timeline -->
+      <div class="card" style="margin-bottom: var(--spacing-xl);">
+        <h2 style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Device History Timeline
+        </h2>
+        {% if device.history.all %}
+          <div style="position: relative; padding-left: var(--spacing-xl);">
+            <!-- Timeline Line -->
+            <div style="position: absolute; left: 8px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, var(--primary-light), var(--secondary-light)); border-radius: 2px;"></div>
+            
+            <div style="display: flex; flex-direction: column; gap: var(--spacing-lg);">
+              {% for step in device.history.all %}
+                <div style="position: relative;">
+                  <!-- Timeline Dot -->
+                  <div style="position: absolute; left: -28px; top: 6px; width: 16px; height: 16px; background-color: var(--primary); border: 3px solid var(--white); border-radius: 50%; box-shadow: var(--shadow-md);"></div>
+                  
+                  <!-- Timeline Content -->
+                  <div style="background-color: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: var(--spacing-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs);">
+                      <div style="font-weight: 600; color: var(--gray-900); font-size: var(--font-size-base);">
+                        {{ step.from_status|default:"Initial" }} → {{ step.to_status }}
+                      </div>
+                      <div style="font-size: var(--font-size-sm); color: var(--gray-500); white-space: nowrap;">
+                        {{ step.changed_at|date:"M d, Y" }} at {{ step.changed_at|time:"g:i A" }}
+                      </div>
+                    </div>
+                    {% if step.note %}
+                      <div style="font-size: var(--font-size-sm); color: var(--gray-600); line-height: var(--line-height-base); margin-top: var(--spacing-xs); padding-top: var(--spacing-xs); border-top: 1px solid var(--gray-200);">
+                        {{ step.note }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div style="background-color: var(--gray-50); padding: var(--spacing-xl); border-radius: var(--radius-md); text-align: center;">
+            <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color: var(--gray-400); margin: 0 auto var(--spacing-md);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p style="color: var(--gray-500); font-size: var(--font-size-base); margin: 0;">No status history available yet.</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Repair Summary & Usage Instructions -->
+      <div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-xl);">
+        <div class="card">
+          <h3 style="font-size: var(--font-size-xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-md);">
+            Repair Summary
+          </h3>
+          <div style="background-color: var(--gray-50); padding: var(--spacing-lg); border-radius: var(--radius-md); border-left: 4px solid var(--secondary);">
+            <p style="color: var(--gray-600); font-size: var(--font-size-sm); line-height: var(--line-height-base); margin: 0;">
+              This device has been inspected, repaired (if needed), and certified for safe use. All quality checks have been completed.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: var(--font-size-xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-md);">
+            Usage Instructions
+          </h3>
+          <div style="background-color: var(--gray-50); padding: var(--spacing-lg); border-radius: var(--radius-md); border-left: 4px solid var(--primary);">
+            <p style="color: var(--gray-600); font-size: var(--font-size-sm); line-height: var(--line-height-base); margin: 0;">
+              Detailed usage instructions will be provided upon order confirmation. Please follow all safety guidelines and manufacturer recommendations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Order Form / Price Card -->
+    <div>
+      <div class="card" style="position: sticky; top: 80px;">
+        <div style="margin-bottom: var(--spacing-lg);">
+          <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Price</div>
+          <div style="font-size: var(--font-size-4xl); font-weight: 700; color: var(--secondary); margin-bottom: var(--spacing-sm);">
+            ₹{{ listing.price|floatformat:2 }}
+          </div>
+          <div style="margin-bottom: var(--spacing-md); display: flex; flex-wrap: wrap; gap: var(--spacing-xs);">
+            {% if listing.is_certified %}
+              <span class="badge badge-success" style="font-size: var(--font-size-sm); padding: 0.5em 1em;">
+                ✓ Certified & Safe
+              </span>
+            {% endif %}
+            {% if listing.is_sold %}
+              <span class="badge badge-secondary" style="background-color: var(--gray-600); font-size: var(--font-size-sm); padding: 0.5em 1em;">
+                Sold
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if listing.is_sold %}
+          <div style="background-color: var(--gray-50); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center; border: 2px solid var(--gray-300);">
+            <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--gray-500); margin: 0 auto var(--spacing-sm);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p style="color: var(--gray-700); font-size: var(--font-size-base); font-weight: 600; margin: 0 0 var(--spacing-xs);">
+              This device has been sold
+            </p>
+            <p style="color: var(--gray-600); font-size: var(--font-size-sm); margin: 0;">
+              Check back later for similar devices
+            </p>
+          </div>
+        {% elif user.is_authenticated and user.is_buyer %}
+          <form method="post" action="{% url 'marketplace:place_order' listing.pk %}" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="shipping_address" class="form-label">Shipping Address</label>
+              <textarea id="shipping_address" 
+                        name="shipping_address" 
+                        class="form-textarea" 
+                        rows="4" 
+                        placeholder="Enter your complete shipping address..." 
+                        required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top: var(--spacing-sm);">
+              Place Order
+            </button>
+          </form>
+        {% elif user.is_authenticated %}
+          <div style="background-color: var(--gray-50); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+            <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--gray-400); margin: 0 auto var(--spacing-sm);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <p style="color: var(--gray-600); font-size: var(--font-size-sm); margin: 0 0 var(--spacing-sm);">
+              You need a buyer account to place orders.
+            </p>
+            <a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary btn-full" style="text-decoration: none;">
+              Go to Dashboard
+            </a>
+          </div>
+        {% else %}
+          <div style="background-color: var(--gray-50); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+            <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--gray-400); margin: 0 auto var(--spacing-sm);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <p style="color: var(--gray-600); font-size: var(--font-size-sm); margin: 0 0 var(--spacing-sm);">
+              Please login to place an order.
+            </p>
+            <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-full" style="text-decoration: none;">
+              Login to Order
+            </a>
+          </div>
+        {% endif %}
+
+        <!-- Additional Info -->
+        <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--gray-200);">
+          <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+            <div style="display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-sm); color: var(--gray-600);">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Certified & Inspected</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-sm); color: var(--gray-600);">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Fast Delivery Available</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-sm); color: var(--gray-600);">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <span>Support Available</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function changeMainImage(imageUrl) {
+  document.getElementById('mainImage').src = imageUrl;
+}
+</script>
+
+<style>
+@media (max-width: 1024px) {
+  .lg\\:col-span-2 {
+    grid-column: span 1;
+  }
+}
+</style>
+{% endblock %}

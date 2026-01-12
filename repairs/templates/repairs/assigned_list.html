@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-xl font-semibold">Assigned Repairs</h1>
+</div>
+<div class="grid gap-4">
+  {% for a in assignments %}
+    <a href="{% url 'repairs:assignment_detail' a.pk %}" class="block bg-white shadow rounded p-4">
+      <div class="font-semibold">{{ a.device.title }} ({{ a.device.listing_id }})</div>
+      <div class="text-sm text-slate-600">Status: {{ a.get_status_display }}</div>
+      {% if a.estimated_completion %}
+        <div class="text-xs text-slate-500">ETA: {{ a.estimated_completion }}</div>
+      {% endif %}
+    </a>
+  {% empty %}
+    <p class="text-slate-600">No devices assigned yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}
+
+

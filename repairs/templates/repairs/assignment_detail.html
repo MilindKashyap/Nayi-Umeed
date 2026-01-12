@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% block title %}Repair Assignment - {{ assignment.device.title }} - Nayi Umeed{% endblock %}
+{% block content %}
+<div class="container py-8">
+  <!-- Back Navigation -->
+  <div style="margin-bottom: var(--spacing-xl);">
+    <a href="{% url 'repairs:assigned_list' %}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Back to My Repairs
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3" style="gap: var(--spacing-xl);">
+    <!-- Main Content -->
+    <div class="lg:col-span-2">
+      <!-- Device Information Card -->
+      <div class="card" style="margin-bottom: var(--spacing-xl);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-lg); flex-wrap: wrap; gap: var(--spacing-md);">
+          <div style="flex: 1;">
+            <h1 style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--gray-900); margin-bottom: var(--spacing-sm); line-height: 1.2;">
+              {{ assignment.device.title }}
+            </h1>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-md); margin-top: var(--spacing-md);">
+              <div style="display: flex; align-items: center; gap: var(--spacing-xs);">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--gray-500);">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                <span style="font-size: var(--font-size-sm); color: var(--gray-600); font-weight: 500;">{{ assignment.device.get_category_display }}</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--spacing-xs);">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--gray-500);">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                </svg>
+                <span style="font-size: var(--font-size-sm); color: var(--gray-600); font-weight: 500;">ID: {{ assignment.device.listing_id }}</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="badge {% if assignment.status == 'certified' %}badge-success{% elif assignment.status == 'in_progress' %}badge-primary{% elif assignment.status == 'completed' %}badge-success{% elif assignment.status == 'rejected' %}badge-error{% else %}badge-warning{% endif %}" style="font-size: var(--font-size-sm); padding: 0.5em 1em;">
+              {{ assignment.get_status_display }}
+            </span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); padding-top: var(--spacing-lg); border-top: 1px solid var(--gray-200);">
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Device Status</div>
+            <div>
+              <span class="badge {% if assignment.device.status == 'certified' or assignment.device.status == 'listed' %}badge-success{% elif assignment.device.status == 'under_repair' %}badge-primary{% else %}badge-secondary{% endif %}">
+                {{ assignment.device.get_status_display }}
+              </span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Condition</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+              {{ assignment.device.get_condition_display }}
+            </div>
+          </div>
+          {% if assignment.estimated_completion %}
+            <div>
+              <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Estimated Completion</div>
+              <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+                {{ assignment.estimated_completion|date:"M d, Y" }}<br>
+                <span style="font-size: var(--font-size-sm); color: var(--gray-500);">{{ assignment.estimated_completion|time:"g:i A" }}</span>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if assignment.device.description %}
+          <div style="margin-top: var(--spacing-lg); padding-top: var(--spacing-lg); border-top: 1px solid var(--gray-200);">
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Description</div>
+            <div style="color: var(--gray-700); line-height: 1.7; font-size: var(--font-size-base);">
+              {{ assignment.device.description|linebreaks }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Repair Update Form -->
+      <div class="card">
+        <h2 style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Update Repair Status
+        </h2>
+
+        <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: var(--spacing-xl);">
+          {% csrf_token %}
+          
+          {% if form.non_field_errors %}
+            <div class="alert alert-error">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="{{ form.status.id_for_label }}" class="form-label">Repair Status</label>
+              {{ form.status }}
+              {% if form.status.errors %}
+                <div class="form-error">{{ form.status.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="{{ form.estimated_completion.id_for_label }}" class="form-label">Estimated Completion</label>
+              {{ form.estimated_completion }}
+              {% if form.estimated_completion.errors %}
+                <div class="form-error">{{ form.estimated_completion.errors }}</div>
+              {% endif %}
+              <p style="font-size: var(--font-size-xs); color: var(--gray-500); margin-top: var(--spacing-xs);">
+                Estimated completion time for logistics & marketplace readiness
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="{{ form.report_file.id_for_label }}" class="form-label">Repair Report File</label>
+            {{ form.report_file }}
+            {% if form.report_file.errors %}
+              <div class="form-error">{{ form.report_file.errors }}</div>
+            {% endif %}
+            {% if assignment.report_file %}
+              <div style="margin-top: var(--spacing-sm); padding: var(--spacing-md); background: var(--gray-50); border-radius: var(--radius-md); border-left: 4px solid var(--success);">
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--success);">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div style="flex: 1;">
+                    <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-900); margin-bottom: var(--spacing-xs);">
+                      Current Report File
+                    </div>
+                    <a href="{{ assignment.report_file.url }}" target="_blank" style="color: var(--primary); text-decoration: none; font-size: var(--font-size-sm); display: inline-flex; align-items: center; gap: var(--spacing-xs);">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Download Current Report
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="{{ form.report_notes.id_for_label }}" class="form-label">Repair Notes</label>
+            {{ form.report_notes }}
+            {% if form.report_notes.errors %}
+              <div class="form-error">{{ form.report_notes.errors }}</div>
+            {% endif %}
+            <p style="font-size: var(--font-size-xs); color: var(--gray-500); margin-top: var(--spacing-xs);">
+              Add detailed notes about the repair work performed, issues found, and parts replaced
+            </p>
+          </div>
+
+          <div style="background: var(--bg-gradient-secondary); padding: var(--spacing-lg); border-radius: var(--radius-md); border: 2px solid var(--secondary-light);">
+            <div style="display: flex; align-items: flex-start; gap: var(--spacing-md);">
+              <input type="checkbox" name="{{ form.is_certified.name }}" id="{{ form.is_certified.id_for_label }}" {% if form.is_certified.value %}checked{% endif %} 
+                     style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer; accent-color: var(--secondary);" />
+              <div style="flex: 1;">
+                <label for="{{ form.is_certified.id_for_label }}" style="font-weight: 600; color: var(--gray-900); font-size: var(--font-size-base); cursor: pointer; display: block; margin-bottom: var(--spacing-xs);">
+                  Mark as Certified
+                </label>
+                <p style="font-size: var(--font-size-sm); color: var(--gray-700); margin: 0; line-height: 1.6;">
+                  Check this box when all safety & performance checks have passed. This will update the device status to "Certified" and make it available for listing in the marketplace.
+                </p>
+              </div>
+            </div>
+            {% if form.is_certified.errors %}
+              <div class="form-error" style="margin-top: var(--spacing-sm);">{{ form.is_certified.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap; padding-top: var(--spacing-lg); border-top: 1px solid var(--gray-200);">
+            <button type="submit" class="btn btn-success">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right: var(--spacing-xs);">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Save Changes
+            </button>
+            <a href="{% url 'repairs:assigned_list' %}" class="btn btn-outline">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+      <!-- Assignment Info Card -->
+      <div class="card" style="margin-bottom: var(--spacing-xl); position: sticky; top: 80px;">
+        <h3 style="font-size: var(--font-size-xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Assignment Details
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Assigned Date</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+              {{ assignment.created_at|date:"M d, Y" }}
+            </div>
+            <div style="font-size: var(--font-size-sm); color: var(--gray-500);">
+              {{ assignment.created_at|time:"g:i A" }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Last Updated</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+              {{ assignment.updated_at|date:"M d, Y" }}
+            </div>
+            <div style="font-size: var(--font-size-sm); color: var(--gray-500);">
+              {{ assignment.updated_at|time:"g:i A" }}
+            </div>
+          </div>
+          {% if assignment.is_certified %}
+            <div style="background: var(--bg-gradient-secondary); padding: var(--spacing-md); border-radius: var(--radius-md); border-left: 4px solid var(--secondary);">
+              <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--secondary);">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span style="font-weight: 600; color: var(--gray-900);">Certified</span>
+              </div>
+              <p style="font-size: var(--font-size-sm); color: var(--gray-700); margin: var(--spacing-xs) 0 0 0; line-height: 1.6;">
+                This device has been certified and is ready for marketplace listing.
+              </p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h3 style="font-size: var(--font-size-xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Quick Actions
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+          <a href="{% url 'devices:detail' assignment.device.pk %}" class="btn btn-outline" style="text-decoration: none; text-align: center;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right: var(--spacing-xs);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            View Device Details
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Form field styling */
+  #{{ form.status.id_for_label }},
+  #{{ form.estimated_completion.id_for_label }},
+  #{{ form.report_notes.id_for_label }} {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    color: var(--gray-900);
+    background-color: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    min-height: 44px;
+    font-family: var(--font-family);
+  }
+
+  #{{ form.report_notes.id_for_label }} {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  #{{ form.status.id_for_label }}:focus,
+  #{{ form.estimated_completion.id_for_label }}:focus,
+  #{{ form.report_notes.id_for_label }}:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), 0 4px 12px rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
+  }
+
+  #{{ form.report_file.id_for_label }} {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    color: var(--gray-900);
+    background-color: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    font-family: var(--font-family);
+    cursor: pointer;
+  }
+
+  #{{ form.report_file.id_for_label }}:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  .form-error {
+    color: var(--error);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-xs);
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends "adminpanel/base.html" %}
+{% block admin_content %}
+<div>
+  <div style="margin-bottom: var(--spacing-xl);">
+    <a href="{% url 'adminpanel:order_management' %}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: var(--spacing-md);">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Back to Orders
+    </a>
+    <h1 style="margin-bottom: var(--spacing-sm);">Order #{{ order.id }} Details</h1>
+    <p style="color: var(--gray-600);">Complete order information including buyer and shipping details</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3" style="gap: var(--spacing-xl);">
+    <!-- Main Order Info -->
+    <div class="lg:col-span-2">
+      <!-- Order Status Card -->
+      <div class="card" style="margin-bottom: var(--spacing-xl);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-lg);">
+          <div>
+            <h2 style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-sm);">
+              Order Status
+            </h2>
+            <div style="margin-top: var(--spacing-md);">
+              <span class="badge {% if order.status == 'delivered' %}badge-success{% elif order.status == 'cancelled' %}badge-error{% elif order.status == 'in_transit' %}badge-primary{% else %}badge-warning{% endif %}" style="font-size: var(--font-size-lg); padding: 0.6em 1.2em;">
+                {{ order.get_status_display }}
+              </span>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-bottom: var(--spacing-xs);">Order Date</div>
+            <div style="font-size: var(--font-size-base); font-weight: 500; color: var(--gray-900);">
+              {{ order.created_at|date:"M d, Y" }}
+            </div>
+            <div style="font-size: var(--font-size-sm); color: var(--gray-500);">
+              {{ order.created_at|time:"g:i A" }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Device Information -->
+      <div class="card" style="margin-bottom: var(--spacing-xl);">
+        <h2 style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Device Information
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg);">
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Device Name</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+              {{ order.listing.device.title }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Listing ID</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500; font-family: monospace;">
+              {{ order.listing.device.listing_id }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Category</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+              {{ order.listing.device.get_category_display }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Price</div>
+            <div style="font-size: var(--font-size-base); color: var(--secondary); font-weight: 600;">
+              ₹{{ order.listing.price|floatformat:2 }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order History Timeline -->
+      <div class="card">
+        <h2 style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Order History
+        </h2>
+        {% if order.history.all %}
+          <div style="position: relative; padding-left: var(--spacing-xl);">
+            <div style="position: absolute; left: 8px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, var(--primary-light), var(--secondary-light)); border-radius: 2px;"></div>
+            <div style="display: flex; flex-direction: column; gap: var(--spacing-lg);">
+              {% for step in order.history.all %}
+                <div style="position: relative;">
+                  <div style="position: absolute; left: -28px; top: 6px; width: 16px; height: 16px; background-color: var(--primary); border: 3px solid var(--white); border-radius: 50%; box-shadow: var(--shadow-md);"></div>
+                  <div style="background-color: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: var(--spacing-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs);">
+                      <div style="font-weight: 600; color: var(--gray-900); font-size: var(--font-size-base);">
+                        {{ step.get_status_display }}
+                      </div>
+                      <div style="font-size: var(--font-size-sm); color: var(--gray-500); white-space: nowrap;">
+                        {{ step.changed_at|date:"M d, Y" }} at {{ step.changed_at|time:"g:i A" }}
+                      </div>
+                    </div>
+                    {% if step.note %}
+                      <div style="font-size: var(--font-size-sm); color: var(--gray-600); line-height: var(--line-height-base); margin-top: var(--spacing-xs); padding-top: var(--spacing-xs); border-top: 1px solid var(--gray-200);">
+                        {{ step.note }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div style="background-color: var(--gray-50); padding: var(--spacing-xl); border-radius: var(--radius-md); text-align: center;">
+            <p style="color: var(--gray-500); font-size: var(--font-size-base); margin: 0;">No order history available.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Sidebar: Buyer & Shipping Info -->
+    <div>
+      <!-- Buyer Information -->
+      <div class="card" style="margin-bottom: var(--spacing-xl);">
+        <h3 style="font-size: var(--font-size-xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Buyer Information
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Name</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900); font-weight: 500;">
+              {{ order.buyer.get_full_name|default:order.buyer.username }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Email</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900);">
+              {{ order.buyer.email }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Phone</div>
+            <div style="font-size: var(--font-size-base); color: var(--gray-900);">
+              {{ order.buyer.phone_number }}
+            </div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-sm); font-weight: 500; color: var(--gray-600); margin-bottom: var(--spacing-xs);">Role</div>
+            <div>
+              <span class="badge badge-secondary">
+                {{ order.buyer.get_role_display }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping Address -->
+      <div class="card">
+        <h3 style="font-size: var(--font-size-xl); font-weight: 600; color: var(--gray-900); margin-bottom: var(--spacing-lg);">
+          Shipping Address
+        </h3>
+        <div style="background-color: var(--gray-50); padding: var(--spacing-lg); border-radius: var(--radius-md); border-left: 4px solid var(--primary);">
+          <p style="color: var(--gray-700); line-height: var(--line-height-base); font-size: var(--font-size-base); margin: 0; white-space: pre-wrap;">
+            {{ order.shipping_address }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

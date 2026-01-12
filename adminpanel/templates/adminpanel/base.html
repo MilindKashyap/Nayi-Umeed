@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display: flex; gap: var(--spacing-xl); min-height: calc(100vh - 200px);">
+  <!-- Sidebar -->
+  <aside style="width: 240px; flex-shrink: 0; background: var(--white); border-right: 1px solid var(--gray-200); padding: var(--spacing-lg); position: sticky; top: 60px; height: fit-content;">
+    <nav style="display: flex; flex-direction: column; gap: var(--spacing-xs);">
+      <a href="{% url 'adminpanel:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" style="padding: var(--spacing-md); border-radius: var(--radius-md); text-decoration: none; color: var(--gray-700); font-weight: 500; {% if request.resolver_match.url_name == 'dashboard' %}background: var(--gray-50); color: var(--primary);{% endif %}">
+        Dashboard
+      </a>
+      <a href="{% url 'adminpanel:device_management' %}" class="{% if 'device' in request.path %}active{% endif %}" style="padding: var(--spacing-md); border-radius: var(--radius-md); text-decoration: none; color: var(--gray-700); font-weight: 500; {% if 'device' in request.path %}background: var(--gray-50); color: var(--primary);{% endif %}">
+        Device Management
+      </a>
+      <a href="{% url 'adminpanel:user_management' %}" class="{% if 'user' in request.path %}active{% endif %}" style="padding: var(--spacing-md); border-radius: var(--radius-md); text-decoration: none; color: var(--gray-700); font-weight: 500; {% if 'user' in request.path %}background: var(--gray-50); color: var(--primary);{% endif %}">
+        User Management
+      </a>
+      <a href="{% url 'adminpanel:order_management' %}" class="{% if 'order' in request.path %}active{% endif %}" style="padding: var(--spacing-md); border-radius: var(--radius-md); text-decoration: none; color: var(--gray-700); font-weight: 500; {% if 'order' in request.path %}background: var(--gray-50); color: var(--primary);{% endif %}">
+        Order Management
+      </a>
+      <a href="{% url 'analytics:impact_dashboard' %}" style="padding: var(--spacing-md); border-radius: var(--radius-md); text-decoration: none; color: var(--gray-700); font-weight: 500;">
+        Analytics
+      </a>
+      <a href="/admin/" style="padding: var(--spacing-md); border-radius: var(--radius-md); text-decoration: none; color: var(--gray-700); font-weight: 500;">
+        Django Admin
+      </a>
+    </nav>
+  </aside>
+  
+  <!-- Main Content -->
+  <main style="flex: 1; min-width: 0;">
+    {% block admin_content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}
+

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-8">
+  <!-- Header -->
+  <div class="card" style="padding: var(--spacing-2xl);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-lg);">
+      <div>
+        <h1 style="margin-bottom: var(--spacing-xs);">Impact & Analytics</h1>
+        <p style="color: var(--gray-600); font-size: var(--font-size-lg);">Concise impact summary for presentation readiness.</p>
+      </div>
+      <a href="{% url 'adminpanel:dashboard' %}" style="color: var(--primary); text-decoration: none;">← Back to Admin</a>
+    </div>
+  </div>
+
+  <!-- Impact Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5" style="gap: var(--spacing-lg);">
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px;">Devices Collected</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--primary); margin-top: var(--spacing-xs);">{{ devices_collected }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px;">Devices Repaired</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--secondary); margin-top: var(--spacing-xs);">{{ devices_repaired }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px;">Devices Redistributed</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--primary-dark); margin-top: var(--spacing-xs);">{{ devices_redistributed }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px;">Estimated CO₂ Saved (kg)</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--secondary); margin-top: var(--spacing-xs);">{{ estimated_co2_saved }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px;">Beneficiaries Served</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--primary); margin-top: var(--spacing-xs);">{{ beneficiaries_served }}</div>
+    </div>
+  </div>
+
+  <!-- Highlights & Notes -->
+  <div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-lg);">
+    <div class="card">
+      <div class="card-header">
+        <h3 style="margin: 0;">Highlights</h3>
+      </div>
+      <ul style="list-style: none; padding-left: 0; margin: 0; display: grid; gap: var(--spacing-sm); color: var(--gray-700);">
+        <li>• Metrics reflect live platform data.</li>
+        <li>• “Redistributed” devices are certified and allocated.</li>
+        <li>• CO₂ saved and beneficiaries are summed from impact records.</li>
+        <li>• Region, bottleneck, and overview charts intentionally hidden.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 style="margin: 0;">Data Notes</h3>
+      </div>
+      <ul style="list-style: none; padding-left: 0; margin: 0; display: grid; gap: var(--spacing-sm); color: var(--gray-700);">
+        <li>• This view is trimmed for presentation; no tables or charts here.</li>
+        <li>• Add DeviceImpact records to expand reporting when needed.</li>
+        <li>• If you need region analytics, enable charts/tables in code later.</li>
+        <li>• Layout optimized to avoid scroll-heavy content.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+

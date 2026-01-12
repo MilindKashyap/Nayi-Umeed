@@ -1,0 +1,96 @@
+{% extends "adminpanel/base.html" %}
+{% block admin_content %}
+<div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-2xl);">
+    <div>
+      <h1 style="margin-bottom: var(--spacing-xs);">User & Partner Management</h1>
+      <p style="color: var(--gray-600);">Manage roles, access, and account status.</p>
+    </div>
+    <a href="{% url 'adminpanel:dashboard' %}" style="color: var(--primary); text-decoration: none;">← Back to Dashboard</a>
+  </div>
+
+  <!-- User Stats -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5" style="gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl);">
+    {% for role_value, role_label in roles %}
+      <div class="card" style="padding: var(--spacing-lg);">
+        <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-bottom: var(--spacing-xs);">{{ role_label }}</div>
+        <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--primary);">
+          {% if role_value == 'donor' %}{{ user_stats.donor|default:0 }}
+          {% elif role_value == 'buyer' %}{{ user_stats.buyer|default:0 }}
+          {% elif role_value == 'both' %}{{ user_stats.both|default:0 }}
+          {% elif role_value == 'repair_partner' %}{{ user_stats.repair_partner|default:0 }}
+          {% elif role_value == 'admin' %}{{ user_stats.admin|default:0 }}
+          {% else %}0{% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Filter -->
+  <div class="card" style="margin-bottom: var(--spacing-xl);">
+    <form method="get" class="grid grid-cols-1 md:grid-cols-3" style="gap: var(--spacing-lg); align-items: end;">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Filter by Role</label>
+        <select name="role" class="form-control">
+          <option value="">All Roles</option>
+          {% for value, label in roles %}
+            <option value="{{ value }}" {% if current_role_filter == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div style="display: flex; gap: var(--spacing-md);">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">Filter</button>
+        <a href="{% url 'adminpanel:user_management' %}" class="btn btn-outline" style="flex: 1; text-decoration: none;">Clear</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- User List -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+      <table class="min-w-full" style="border-collapse: collapse;">
+        <thead style="background: var(--gray-50); border-bottom: 1px solid var(--gray-200);">
+          <tr>
+            <th class="table-th">User</th>
+            <th class="table-th">Email</th>
+            <th class="table-th">Phone</th>
+            <th class="table-th">Role</th>
+            <th class="table-th">Status</th>
+            <th class="table-th">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+            <tr class="table-row">
+              <td class="table-td">
+                <div style="font-weight: 600; color: var(--gray-900);">{{ u.get_full_name|default:u.username }}</div>
+                <div style="font-size: var(--font-size-sm); color: var(--gray-600);">@{{ u.username }}</div>
+              </td>
+              <td class="table-td" style="color: var(--gray-700);">{{ u.email }}</td>
+              <td class="table-td" style="color: var(--gray-700);">{{ u.phone_number }}</td>
+              <td class="table-td">
+                <span class="badge badge-primary">{{ u.get_role_display }}</span>
+              </td>
+              <td class="table-td">
+                <span class="badge {% if u.is_active %}badge-success{% else %}badge-error{% endif %}">
+                  {% if u.is_active %}Active{% else %}Inactive{% endif %}
+                </span>
+              </td>
+              <td class="table-td">
+                <a href="{% url 'adminpanel:user_edit' u.id %}" class="btn btn-outline" style="padding: 0.5rem 0.75rem; min-height: 0; text-decoration: none;">Edit</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="table-td" style="text-align: center; color: var(--gray-600);">
+                No users found.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

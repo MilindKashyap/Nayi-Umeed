@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Login - Nayi Umeed{% endblock %}
+{% block content %}
+<div class="container-narrow" style="margin: var(--spacing-3xl) auto;">
+  <div class="card" style="max-width: 480px; margin: 0 auto;">
+    <div class="text-center mb-4">
+      <h1 style="margin-bottom: var(--spacing-sm);">Sign In</h1>
+      <p style="color: var(--gray-600); font-size: var(--font-size-base);">Access your account to continue</p>
+    </div>
+    
+    {% if form.errors %}
+      <div class="alert alert-error">
+        <strong>Please check your credentials and try again.</strong>
+      </div>
+    {% endif %}
+    
+    <form method="post" novalidate>
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+        <input 
+          type="text" 
+          id="{{ form.username.id_for_label }}"
+          name="{{ form.username.name }}"
+          class="form-control"
+          required
+          autocomplete="username"
+          placeholder="Enter your username"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="{{ form.password.id_for_label }}"
+          name="{{ form.password.name }}"
+          class="form-control"
+          required
+          autocomplete="current-password"
+          placeholder="Enter your password"
+        >
+      </div>
+      
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top: var(--spacing-lg);">
+        Sign In
+      </button>
+    </form>
+    
+    <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--gray-200); text-align: center;">
+      <p style="color: var(--gray-600); font-size: var(--font-size-sm); margin-bottom: var(--spacing-md);">
+        Don't have an account?
+      </p>
+      <a href="{% url 'accounts:register' %}" class="btn btn-outline btn-full" style="text-decoration: none;">
+        Create Account
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

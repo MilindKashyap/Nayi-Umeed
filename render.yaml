@@ -1,0 +1,42 @@
+services:
+  # PostgreSQL Database
+  - type: pspg
+    name: nayi-umeed-db
+    plan: free  # Change to 'starter' or 'standard' for production
+    databaseName: nayi_umeed
+    user: nayi_umeed_user
+
+  # Django Web Service
+  - type: web
+    name: nayi-umeed
+    env: python
+    plan: free  # Change to 'starter' or 'standard' for production
+    region: oregon  # Options: oregon, frankfurt, singapore, mumbai, tokyo
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: gunicorn nayi_umeed.wsgi:application
+    envVars:
+      # Django Settings
+      - key: PYTHON_VERSION
+        value: 3.12.4
+      - key: DJANGO_SETTINGS_MODULE
+        value: nayi_umeed.settings
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: nayi-umeed.onrender.com,localhost,127.0.0.1  # Update with your actual Render URL after deployment
+      
+      # Database Configuration (automatically connected)
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nayi-umeed-db
+          property: connectionString
+      
+      # Static Files
+      - key: DISABLE_COLLECTSTATIC
+        value: 0
+      
+      # Timezone
+      - key: TZ
+        value: Asia/Kolkata

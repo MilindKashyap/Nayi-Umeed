@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block title %}Submit Device - Nayi Umeed{% endblock %}
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+  <div class="card">
+    <div class="card-header">
+      <h1 style="margin-bottom: var(--spacing-sm);">Submit Medical Device</h1>
+      <p style="color: var(--gray-600); margin: 0;">Complete the form below to donate your medical device</p>
+    </div>
+    
+    <!-- Progress Indicator -->
+    <div style="margin-bottom: var(--spacing-xl);">
+      <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+        <div style="flex: 1; height: 4px; background: var(--primary); border-radius: 2px;"></div>
+        <div style="flex: 1; height: 4px; background: var(--gray-300); border-radius: 2px;"></div>
+        <div style="flex: 1; height: 4px; background: var(--gray-300); border-radius: 2px;"></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-xs); font-size: var(--font-size-xs); color: var(--gray-600);">
+        <span>Device Info</span>
+        <span>Images</span>
+        <span>Review</span>
+      </div>
+    </div>
+    
+    {% if form.errors %}
+      <div class="alert alert-error">
+        <strong>Please correct the errors below:</strong>
+        <ul style="margin-top: var(--spacing-sm); margin-left: var(--spacing-lg);">
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data" id="device-form" novalidate>
+      {% csrf_token %}
+      
+      <div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-lg);">
+        <div class="form-group">
+          <label for="{{ form.title.id_for_label }}" class="form-label">Device Name</label>
+          <input 
+            type="text" 
+            id="{{ form.title.id_for_label }}"
+            name="{{ form.title.name }}"
+            class="form-control"
+            required
+            placeholder="e.g., Portable Oxygen Concentrator"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+          <select 
+            id="{{ form.category.id_for_label }}"
+            name="{{ form.category.name }}"
+            class="form-control"
+            required
+          >
+            {% for value, label in form.category.field.choices %}
+              <option value="{{ value }}" {% if form.category.value == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+        <textarea 
+          id="{{ form.description.id_for_label }}"
+          name="{{ form.description.name }}"
+          class="form-control"
+          rows="4"
+          placeholder="Describe the device's condition, age, and any relevant details..."
+        >{{ form.description.value|default:'' }}</textarea>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-lg);">
+        <div class="form-group">
+          <label for="{{ form.condition.id_for_label }}" class="form-label">Condition</label>
+          <select 
+            id="{{ form.condition.id_for_label }}"
+            name="{{ form.condition.name }}"
+            class="form-control"
+            required
+          >
+            {% for value, label in form.condition.field.choices %}
+              <option value="{{ value }}" {% if form.condition.value == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.price.id_for_label }}" class="form-label">Price (Optional)</label>
+          <input 
+            type="number" 
+            id="{{ form.price.id_for_label }}"
+            name="{{ form.price.name }}"
+            class="form-control"
+            step="0.01"
+            min="0"
+            placeholder="Leave blank for free donation"
+          >
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="id_images" class="form-label">Device Images</label>
+        <input 
+          type="file" 
+          id="id_images" 
+          name="images" 
+          multiple 
+          accept="image/*"
+          class="form-control"
+          required
+        >
+        <small style="color: var(--gray-500); font-size: var(--font-size-xs); margin-top: var(--spacing-xs); display: block;">
+          Upload 3-5 photos showing different angles of the device
+        </small>
+        <div id="preview" class="grid grid-cols-2 md:grid-cols-4" style="gap: var(--spacing-md); margin-top: var(--spacing-lg);"></div>
+      </div>
+      
+      <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl);">
+        <a href="{% url 'devices:my_devices' %}" class="btn btn-outline" style="flex: 1; text-decoration: none; text-align: center;">
+          Cancel
+        </a>
+        <button type="submit" class="btn btn-success" style="flex: 2;">
+          Submit Device
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInput = document.getElementById('id_images');
+  const preview = document.getElementById('preview');
+  
+  if (fileInput && preview) {
+    fileInput.addEventListener('change', function(e) {
+      preview.innerHTML = '';
+      const files = Array.from(e.target.files);
+      
+      files.forEach((file) => {
+        if (!file.type.startsWith('image/')) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const div = document.createElement('div');
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          img.style.width = '100%';
+          img.style.height = '120px';
+          img.style.objectFit = 'cover';
+          img.style.borderRadius = 'var(--radius-md)';
+          img.style.border = '1px solid var(--gray-200)';
+          div.appendChild(img);
+          preview.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

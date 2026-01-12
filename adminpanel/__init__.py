@@ -1,0 +1,2 @@
+# Admin panel application placeholder
+

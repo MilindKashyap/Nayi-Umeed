@@ -1,0 +1,91 @@
+{% extends "adminpanel/base.html" %}
+{% block admin_content %}
+<div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-xl);">
+    <div>
+      <h1 style="margin-bottom: var(--spacing-xs);">Device Management</h1>
+      <p style="color: var(--gray-600);">Review, approve, and assign devices to repair partners.</p>
+    </div>
+    <a href="{% url 'adminpanel:dashboard' %}" style="color: var(--primary); text-decoration: none;">← Back to Dashboard</a>
+  </div>
+
+  <!-- Filters -->
+  <div class="card" style="margin-bottom: var(--spacing-xl);">
+    <form method="get" class="grid grid-cols-1 md:grid-cols-3" style="gap: var(--spacing-lg); align-items: end;">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Approval Status</label>
+        <select name="approval_status" class="form-control">
+          <option value="">All</option>
+          {% for value, label in approval_statuses %}
+            <option value="{{ value }}" {% if current_approval_filter == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Device Status</label>
+        <select name="status" class="form-control">
+          <option value="">All</option>
+          {% for value, label in statuses %}
+            <option value="{{ value }}" {% if current_status_filter == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div style="display: flex; gap: var(--spacing-md);">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">Filter</button>
+        <a href="{% url 'adminpanel:device_management' %}" class="btn btn-outline" style="flex: 1; text-decoration: none;">Clear</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Device List -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+      <table class="min-w-full" style="border-collapse: collapse;">
+        <thead style="background: var(--gray-50); border-bottom: 1px solid var(--gray-200);">
+          <tr>
+            <th class="table-th">Device</th>
+            <th class="table-th">Donor</th>
+            <th class="table-th">Status</th>
+            <th class="table-th">Approval</th>
+            <th class="table-th">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for device in devices %}
+            <tr class="table-row">
+              <td class="table-td">
+                <div style="font-weight: 600; color: var(--gray-900);">{{ device.title }}</div>
+                <div style="font-size: var(--font-size-sm); color: var(--gray-600);">ID: {{ device.listing_id }}</div>
+              </td>
+              <td class="table-td" style="color: var(--gray-700);">
+                {{ device.donor.get_full_name|default:device.donor.username }}
+              </td>
+              <td class="table-td">
+                <span class="badge {% if device.status == 'allocated' %}badge-success{% elif device.status == 'certified' or device.status == 'listed' %}badge-primary{% elif device.status == 'under_repair' or device.status == 'under_inspection' %}badge-warning{% else %}badge-secondary{% endif %}">
+                  {{ device.get_status_display }}
+                </span>
+              </td>
+              <td class="table-td">
+                <span class="badge {% if device.admin_approval_status == 'approved' %}badge-success{% elif device.admin_approval_status == 'rejected' %}badge-error{% elif device.admin_approval_status == 'on_hold' %}badge-warning{% else %}badge-secondary{% endif %}">
+                  {{ device.get_admin_approval_status_display }}
+                </span>
+              </td>
+              <td class="table-td" style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                <a href="{% url 'adminpanel:device_approval' device.id %}" class="btn btn-outline" style="padding: 0.5rem 0.75rem; min-height: 0;">Approve/Reject</a>
+                <a href="{% url 'adminpanel:assign_repair' device.id %}" class="btn btn-primary" style="padding: 0.5rem 0.75rem; min-height: 0;">Assign Repair</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="table-td" style="text-align: center; color: var(--gray-600);">
+                No devices found.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

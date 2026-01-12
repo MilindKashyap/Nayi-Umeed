@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Nayi Umeed{% endblock %}
+{% block content %}
+<!-- Hero Section -->
+<div class="text-center mb-4" style="padding: var(--spacing-3xl) 0;">
+  <h1 style="font-size: var(--font-size-4xl); margin-bottom: var(--spacing-md); color: var(--gray-900);">
+    Welcome, {{ user.get_full_name|default:user.username }}
+  </h1>
+  <p style="font-size: var(--font-size-lg); color: var(--gray-600); max-width: 600px; margin: 0 auto;">
+    Choose how you'd like to contribute to accessible healthcare
+  </p>
+</div>
+
+<!-- Primary Actions Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-xl); margin-bottom: var(--spacing-3xl);">
+  <!-- Donate Card -->
+  <div class="card" style="text-align: center; padding: var(--spacing-2xl);">
+    <div style="font-size: 3rem; margin-bottom: var(--spacing-lg);">❤️</div>
+    <h2 style="margin-bottom: var(--spacing-md);">Donate Devices</h2>
+    <p style="color: var(--gray-600); margin-bottom: var(--spacing-xl);">
+      Submit medical devices for donation. Track their journey from collection to redistribution.
+    </p>
+    <a href="{% url 'devices:create' %}" class="btn btn-success">
+      Submit a Device
+    </a>
+    <div style="margin-top: var(--spacing-lg);">
+      <a href="{% url 'devices:my_devices' %}" style="color: var(--primary); text-decoration: none; font-size: var(--font-size-sm);">
+        View My Devices →
+      </a>
+    </div>
+  </div>
+  
+  <!-- Marketplace Card -->
+  <div class="card" style="text-align: center; padding: var(--spacing-2xl);">
+    <div style="font-size: 3rem; margin-bottom: var(--spacing-lg);">🏥</div>
+    <h2 style="margin-bottom: var(--spacing-md);">Browse Marketplace</h2>
+    <p style="color: var(--gray-600); margin-bottom: var(--spacing-xl);">
+      Purchase certified, safe medical devices at affordable prices. All devices are inspected and verified.
+    </p>
+    <a href="{% url 'marketplace:public_listings' %}" class="btn btn-primary">
+      Browse Devices
+    </a>
+  </div>
+</div>
+
+<!-- Impact Stats (if available) -->
+<div class="card" style="background: var(--gray-50); border: 1px solid var(--gray-200);">
+  <h3 style="text-align: center; margin-bottom: var(--spacing-xl);">Platform Impact</h3>
+  <div class="grid grid-cols-2 md:grid-cols-4" style="gap: var(--spacing-lg); text-align: center;">
+    <div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--primary);">—</div>
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-top: var(--spacing-xs);">Devices Collected</div>
+    </div>
+    <div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--secondary);">—</div>
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-top: var(--spacing-xs);">Devices Repaired</div>
+    </div>
+    <div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--secondary-dark);">—</div>
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-top: var(--spacing-xs);">Devices Redistributed</div>
+    </div>
+    <div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--primary-dark);">—</div>
+      <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-top: var(--spacing-xs);">Lives Impacted</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

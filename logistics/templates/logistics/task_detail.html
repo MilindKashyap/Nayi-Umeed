@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+  <div class="bg-white shadow rounded-lg p-6 space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-start">
+      <div>
+        <h1 class="text-2xl font-semibold text-slate-900">
+          {% if task.device %}
+            Pickup: {{ task.device.title }}
+          {% elif task.order %}
+            Delivery: Order #{{ task.order.id }}
+          {% else %}
+            Logistics Task #{{ task.id }}
+          {% endif %}
+        </h1>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="px-3 py-1 text-sm font-semibold rounded
+            {% if task.task_type == 'pickup' %}bg-blue-100 text-blue-700{% else %}bg-green-100 text-green-700{% endif %}">
+            {{ task.get_task_type_display }}
+          </span>
+          <span class="px-3 py-1 text-sm font-semibold rounded
+            {% if task.status == 'assigned' %}bg-yellow-100 text-yellow-700
+            {% elif task.status == 'picked_up' %}bg-blue-100 text-blue-700
+            {% elif task.status == 'delivered' %}bg-emerald-100 text-emerald-700
+            {% else %}bg-slate-100 text-slate-700{% endif %}">
+            {{ task.get_status_display }}
+          </span>
+        </div>
+      </div>
+      <a href="{% url 'logistics:task_list' %}" class="text-sm text-slate-600 hover:text-slate-900">← Back to Tasks</a>
+    </div>
+
+    <!-- Device/Order Info -->
+    <div class="border-t pt-4">
+      {% if task.device %}
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <div class="text-sm font-medium text-slate-700">Device Information</div>
+            <div class="mt-1 text-slate-900">{{ task.device.title }}</div>
+            <div class="text-sm text-slate-600">Listing ID: {{ task.device.listing_id }}</div>
+            <div class="text-sm text-slate-600">Category: {{ task.device.get_category_display }}</div>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-slate-700">Donor</div>
+            <div class="mt-1 text-slate-900">{{ task.device.donor.get_full_name|default:task.device.donor.username }}</div>
+            <div class="text-sm text-slate-600">{{ task.device.donor.email }}</div>
+            <div class="text-sm text-slate-600">{{ task.device.donor.phone_number }}</div>
+          </div>
+        </div>
+      {% elif task.order %}
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <div class="text-sm font-medium text-slate-700">Order Information</div>
+            <div class="mt-1 text-slate-900">Order #{{ task.order.id }}</div>
+            <div class="text-sm text-slate-600">{{ task.order.listing.device.title }}</div>
+            <div class="text-sm text-slate-600">Price: ₹{{ task.order.listing.price }}</div>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-slate-700">Buyer</div>
+            <div class="mt-1 text-slate-900">{{ task.order.buyer.get_full_name|default:task.order.buyer.username }}</div>
+            <div class="text-sm text-slate-600">{{ task.order.buyer.email }}</div>
+            <div class="text-sm text-slate-600">{{ task.order.buyer.phone_number }}</div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Address Display -->
+    <div class="border-t pt-4">
+      <div class="text-sm font-medium text-slate-700 mb-2">
+        {% if task.task_type == 'pickup' %}Pickup Address{% else %}Delivery Address{% endif %}
+      </div>
+      <div class="bg-slate-50 rounded p-3 text-slate-900">{{ task.display_address }}</div>
+    </div>
+
+    <!-- Status Update Form -->
+    <div class="border-t pt-4">
+      <h2 class="text-lg font-semibold mb-4">Update Task Status</h2>
+      <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.status.label }}</label>
+            {{ form.status }}
+          </div>
+        </div>
+
+        {% if task.task_type == 'pickup' %}
+          <div class="border rounded p-4 bg-blue-50">
+            <div class="text-sm font-medium text-blue-900 mb-3">Pickup Proof & Location</div>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.pickup_proof.label }}</label>
+                {{ form.pickup_proof }}
+                {% if task.pickup_proof %}
+                  <div class="mt-2">
+                    <a href="{{ task.pickup_proof.url }}" target="_blank" class="text-sm text-emerald-700 hover:underline">View current proof</a>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.pickup_latitude.label }}</label>
+                  {{ form.pickup_latitude }}
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.pickup_longitude.label }}</label>
+                  {{ form.pickup_longitude }}
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 mt-2">Upload proof image and optional GPS coordinates for pickup location.</p>
+          </div>
+        {% endif %}
+
+        {% if task.task_type == 'delivery' %}
+          <div class="border rounded p-4 bg-green-50">
+            <div class="text-sm font-medium text-green-900 mb-3">Delivery Proof & Location</div>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.delivery_proof.label }}</label>
+                {{ form.delivery_proof }}
+                {% if task.delivery_proof %}
+                  <div class="mt-2">
+                    <a href="{{ task.delivery_proof.url }}" target="_blank" class="text-sm text-emerald-700 hover:underline">View current proof</a>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.delivery_latitude.label }}</label>
+                  {{ form.delivery_latitude }}
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.delivery_longitude.label }}</label>
+                  {{ form.delivery_longitude }}
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 mt-2">Upload proof image and optional GPS coordinates for delivery location.</p>
+          </div>
+        {% endif %}
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.notes.label }}</label>
+          {{ form.notes }}
+        </div>
+
+        <button type="submit" class="bg-emerald-600 text-white px-6 py-2 rounded hover:bg-emerald-700">
+          Update Task
+        </button>
+      </form>
+    </div>
+
+    <!-- Status History Timeline -->
+    <div class="border-t pt-4">
+      <h2 class="text-lg font-semibold mb-4">Status History</h2>
+      <div class="space-y-3">
+        {% for history in task.history.all %}
+          <div class="flex items-start gap-3">
+            <div class="w-2 h-2 rounded-full bg-emerald-500 mt-2"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-slate-900">{{ history.get_status_display }}</div>
+              {% if history.note %}
+                <div class="text-sm text-slate-600">{{ history.note }}</div>
+              {% endif %}
+              <div class="text-xs text-slate-500">{{ history.changed_at|date:"M d, Y H:i" }}</div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-sm text-slate-600">No status history yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Proof Images Display -->
+    {% if task.pickup_proof or task.delivery_proof %}
+      <div class="border-t pt-4">
+        <h2 class="text-lg font-semibold mb-4">Proof Images</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          {% if task.pickup_proof %}
+            <div>
+              <div class="text-sm font-medium text-slate-700 mb-2">Pickup Proof</div>
+              <img src="{{ task.pickup_proof.url }}" alt="Pickup proof" class="rounded border max-w-full h-auto">
+              {% if task.pickup_latitude and task.pickup_longitude %}
+                <div class="text-xs text-slate-500 mt-1">
+                  Location: {{ task.pickup_latitude }}, {{ task.pickup_longitude }}
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if task.delivery_proof %}
+            <div>
+              <div class="text-sm font-medium text-slate-700 mb-2">Delivery Proof</div>
+              <img src="{{ task.delivery_proof.url }}" alt="Delivery proof" class="rounded border max-w-full h-auto">
+              {% if task.delivery_latitude and task.delivery_longitude %}
+                <div class="text-xs text-slate-500 mt-1">
+                  Location: {{ task.delivery_latitude }}, {{ task.delivery_longitude }}
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,191 @@
+{% extends "adminpanel/base.html" %}
+{% block admin_content %}
+<div>
+  <div style="margin-bottom: var(--spacing-2xl);">
+    <h1 style="margin-bottom: var(--spacing-sm);">Admin Dashboard</h1>
+    <p style="color: var(--gray-600);">Welcome, {{ user.get_full_name|default:user.username }}</p>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style="gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl);">
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Total Devices</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--gray-900);">{{ total_devices }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Repaired Devices</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--secondary);">{{ repaired_devices }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Redistributed</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--primary);">{{ redistributed_devices }}</div>
+    </div>
+    <div class="card">
+      <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--gray-600); margin-bottom: var(--spacing-sm);">Pending Approval</div>
+      <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--warning);">{{ pending_approval }}</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid grid-cols-1 lg:grid-cols-2" style="gap: var(--spacing-xl); margin-bottom: var(--spacing-2xl);">
+    <div class="card">
+      <h3 style="margin-bottom: var(--spacing-lg);">Device Status Distribution</h3>
+      <div style="position: relative; height: 260px;">
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: var(--spacing-lg);">Device Categories</h3>
+      <div style="position: relative; height: 260px;">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: var(--spacing-lg);">Monthly Submissions</h3>
+      <div style="position: relative; height: 260px;">
+        <canvas id="trendsChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: var(--spacing-lg);">Approval Status</h3>
+      <div style="position: relative; height: 260px;">
+        <canvas id="approvalChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="grid grid-cols-1 lg:grid-cols-2" style="gap: var(--spacing-xl);">
+    <div class="card">
+      <div class="card-header">
+        <h3 style="margin: 0;">Recent Device Submissions</h3>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+        {% for device in recent_devices|slice:":5" %}
+          <div style="padding: var(--spacing-md); background: var(--gray-50); border-radius: var(--radius-md);">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <div style="font-weight: 600; margin-bottom: var(--spacing-xs);">{{ device.title }}</div>
+                <div style="font-size: var(--font-size-sm); color: var(--gray-600);">{{ device.listing_id }}</div>
+              </div>
+              <span class="badge {% if device.admin_approval_status == 'approved' %}badge-success{% elif device.admin_approval_status == 'rejected' %}badge-error{% else %}badge-warning{% endif %}">
+                {{ device.get_admin_approval_status_display }}
+              </span>
+            </div>
+          </div>
+        {% empty %}
+          <p style="color: var(--gray-600); text-align: center; padding: var(--spacing-lg);">No recent devices</p>
+        {% endfor %}
+      </div>
+      <div style="margin-top: var(--spacing-lg); text-align: center;">
+        <a href="{% url 'adminpanel:device_management' %}" style="color: var(--primary); text-decoration: none; font-size: var(--font-size-sm);">
+          View All Devices →
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 style="margin: 0;">Recent Orders</h3>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+        {% for order in recent_orders|slice:":5" %}
+          <div style="padding: var(--spacing-md); background: var(--gray-50); border-radius: var(--radius-md);">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <div style="font-weight: 600; margin-bottom: var(--spacing-xs);">Order #{{ order.id }}</div>
+                <div style="font-size: var(--font-size-sm); color: var(--gray-600);">{{ order.listing.device.title }}</div>
+              </div>
+              <span class="badge {% if order.status == 'delivered' %}badge-success{% elif order.status == 'in_transit' %}badge-primary{% else %}badge-warning{% endif %}">
+                {{ order.get_status_display }}
+              </span>
+            </div>
+          </div>
+        {% empty %}
+          <p style="color: var(--gray-600); text-align: center; padding: var(--spacing-lg);">No recent orders</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  const colors = {
+    primary: '#2563EB',
+    secondary: '#059669',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    gray: '#6B7280'
+  };
+
+  fetch("{% url 'adminpanel:analytics_api' %}?type=device_status")
+    .then(r => r.json())
+    .then(data => {
+      new Chart(document.getElementById('statusChart'), {
+        type: 'doughnut',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            data: data.data,
+            backgroundColor: [colors.primary, colors.secondary, colors.warning, colors.error, colors.gray, '#8B5CF6', '#EC4899'],
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+    });
+
+  fetch("{% url 'adminpanel:analytics_api' %}?type=device_category")
+    .then(r => r.json())
+    .then(data => {
+      new Chart(document.getElementById('categoryChart'), {
+        type: 'bar',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: 'Devices',
+            data: data.data,
+            backgroundColor: colors.primary,
+          }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+      });
+    });
+
+  fetch("{% url 'adminpanel:analytics_api' %}?type=monthly_trends")
+    .then(r => r.json())
+    .then(data => {
+      new Chart(document.getElementById('trendsChart'), {
+        type: 'line',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: 'Submissions',
+            data: data.data,
+            borderColor: colors.secondary,
+            backgroundColor: colors.secondary + '20',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+      });
+    });
+
+  fetch("{% url 'adminpanel:analytics_api' %}?type=approval_status")
+    .then(r => r.json())
+    .then(data => {
+      new Chart(document.getElementById('approvalChart'), {
+        type: 'pie',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            data: data.data,
+            backgroundColor: [colors.warning, colors.secondary, colors.error, colors.gray],
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+    });
+</script>
+{% endblock %}
