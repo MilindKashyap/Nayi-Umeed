@@ -1,11 +1,4 @@
 services:
-  # PostgreSQL Database
-  - type: pg
-    name: nayi-umeed-db
-    plan: free  # Change to 'starter' or 'standard' for production
-    databaseName: nayi_umeed
-    user: nayi_umeed_user
-
   # Django Web Service
   - type: web
     name: nayi-umeed
@@ -40,3 +33,10 @@ services:
       # Timezone
       - key: TZ
         value: Asia/Kolkata
+
+databases:
+  # PostgreSQL Database
+  - name: nayi-umeed-db
+    plan: free  # Change to 'starter' or 'standard' for production
+    databaseName: nayi_umeed
+    user: nayi_umeed_user
