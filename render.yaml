@@ -1,6 +1,6 @@
 services:
   # PostgreSQL Database
-  - type: pspg
+  - type: pg
     name: nayi-umeed-db
     plan: free  # Change to 'starter' or 'standard' for production
     databaseName: nayi_umeed
