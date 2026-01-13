@@ -21,8 +21,4 @@ urlpatterns = [
     path("logistics/", include("logistics.urls")),
     path("adminpanel/", include("adminpanel.urls")),
     path("analytics/", include("analytics.urls")),
-]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
