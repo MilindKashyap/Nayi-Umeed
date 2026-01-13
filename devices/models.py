@@ -94,26 +94,43 @@ class DeviceImage(models.Model):
     def __str__(self):
         return f"Image for {self.device.listing_id}"
     
+    @property
     def get_image_url(self):
-        """Get Cloudinary URL if image is stored there, otherwise return regular URL"""
-        image_url = self.image.url
-        # If it's already a Cloudinary URL, return it
-        if "cloudinary.com" in image_url:
-            return image_url
-        # If it's a public_id (no /media/ prefix), generate Cloudinary URL
-        if not image_url.startswith("/media/"):
+        """Get Cloudinary URL - always returns Cloudinary URL if public_id is stored"""
+        try:
+            # Get the stored value (could be public_id or path)
+            stored_value = self.image.name if hasattr(self.image, 'name') else str(self.image)
+            
+            # If it's already a full Cloudinary URL, return it
+            if "cloudinary.com" in stored_value or stored_value.startswith("http"):
+                return stored_value
+            
+            # If it's a public_id (no /media/ prefix and no http), generate Cloudinary URL
+            if stored_value and not stored_value.startswith("/media/") and not stored_value.startswith("http"):
+                try:
+                    import cloudinary
+                    from cloudinary.utils import cloudinary_url
+                    from django.conf import settings
+                    
+                    # Always use Cloudinary credentials from settings or hardcoded fallback
+                    cloud_name = getattr(settings, "CLOUDINARY_CLOUD_NAME", "duo3tqnyj")
+                    if cloud_name:
+                        url, _ = cloudinary_url(stored_value, secure=True, cloud_name=cloud_name)
+                        return url
+                except Exception as e:
+                    # Fallback: construct URL manually
+                    cloud_name = getattr(settings, "CLOUDINARY_CLOUD_NAME", "duo3tqnyj")
+                    if cloud_name:
+                        return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{stored_value}"
+            
+            # Fallback to regular URL
+            return self.image.url
+        except:
+            # Ultimate fallback
             try:
-                import cloudinary
-                from cloudinary.utils import cloudinary_url
-                from django.conf import settings
-                # Check if Cloudinary is configured
-                if (getattr(settings, "CLOUDINARY_CLOUD_NAME", None) and 
-                    getattr(settings, "CLOUDINARY_API_KEY", None)):
-                    url, _ = cloudinary_url(image_url, secure=True)
-                    return url
+                return self.image.url
             except:
-                pass
-        return image_url
+                return ""
 
 
 class DeviceStatusHistory(models.Model):
