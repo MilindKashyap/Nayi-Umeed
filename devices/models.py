@@ -127,8 +127,30 @@ class DeviceImage(models.Model):
                 if len(parts) == 2 and parts[1] in ['jpg', 'jpeg', 'png', 'gif', 'webp']:
                     stored_value = parts[0]
             
-            # Construct Cloudinary URL
-            return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{stored_value}"
+            # Try to get actual Cloudinary URL with version
+            try:
+                import cloudinary
+                import cloudinary.api
+                from django.conf import settings
+                
+                cloudinary.config(
+                    cloud_name=cloud_name,
+                    api_key=getattr(settings, "CLOUDINARY_API_KEY", "436353534932931"),
+                    api_secret=getattr(settings, "CLOUDINARY_API_SECRET", "bcuxK2hTL-UDQFyzAxnKBKbY3o8"),
+                    secure=True
+                )
+                
+                # Try to get resource info to get the actual URL
+                resource = cloudinary.api.resource(stored_value)
+                if resource and 'secure_url' in resource:
+                    return resource['secure_url']
+            except:
+                # If we can't fetch from API, use versionless URL (Cloudinary supports this)
+                # Versionless URLs work if the image was uploaded with overwrite or has a unique public_id
+                pass
+            
+            # Fallback: Use versionless URL format (Cloudinary will serve the latest version)
+            return f"https://res.cloudinary.com/{cloud_name}/image/upload/{stored_value}"
             
         except Exception as e:
             # Fallback: try to use image.url and convert if needed
@@ -142,7 +164,7 @@ class DeviceImage(models.Model):
                         # Clean duplicate paths
                         if "nayi_umeed/device_images/nayi_umeed/device_images" in path:
                             path = path.replace("nayi_umeed/device_images/nayi_umeed/device_images/", "device_images/")
-                        return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{path}"
+                        return f"https://res.cloudinary.com/{cloud_name}/image/upload/{path}"
             except:
                 pass
             return ""
