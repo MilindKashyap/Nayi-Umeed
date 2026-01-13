@@ -1,5 +1,6 @@
 """
 Script to export local SQLite data for migration to Render/PostgreSQL
+Automatically uploads images to Cloudinary before exporting.
 Run this BEFORE deploying to Render to backup your local data.
 """
 import os
@@ -20,6 +21,26 @@ def export_data():
     print("Exporting Local Data for Render Deployment")
     print("=" * 60)
     
+    # Step 1: Upload images to Cloudinary if configured
+    cloudinary_configured = (
+        getattr(settings, "CLOUDINARY_CLOUD_NAME", "") and
+        getattr(settings, "CLOUDINARY_API_KEY", "") and
+        getattr(settings, "CLOUDINARY_API_SECRET", "")
+    )
+    
+    if cloudinary_configured:
+        print("\n[STEP 1] Cloudinary detected - uploading images...")
+        try:
+            call_command('upload_images_to_cloudinary', verbosity=1)
+            print("[SUCCESS] Images uploaded to Cloudinary!\n")
+        except Exception as e:
+            print(f"[WARNING] Error uploading images to Cloudinary: {e}")
+            print("[CONTINUING] Exporting data anyway (images may need manual upload)...\n")
+    else:
+        print("\n[SKIP] Cloudinary not configured - skipping image upload")
+        print("[NOTE] Images will need to be uploaded manually or via admin after deployment\n")
+    
+    # Step 2: Export data
     output_file = Path(settings.BASE_DIR) / 'local_data_export.json'
     
     # Exclude some system tables that shouldn't be migrated
@@ -66,10 +87,10 @@ def export_data():
                 print(f"   - {model}: {count} records")
         
         print(f"\n[IMPORTANT]:")
-        print(f"   1. Keep this file safe - it contains all your data")
-        print(f"   2. Upload this file to Render after deployment")
-        print(f"   3. Run the import script on Render to load this data")
-        print(f"   4. Delete this file after successful import (contains sensitive data)")
+        print(f"   1. This file contains all your data with Cloudinary image URLs")
+        print(f"   2. Commit and push this file to GitHub")
+        print(f"   3. Render will automatically import it on next deployment")
+        print(f"   4. Delete this file from GitHub after successful import (contains sensitive data)")
         
         return output_file
         
