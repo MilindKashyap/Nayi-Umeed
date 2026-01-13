@@ -1,0 +1,1490 @@
+[
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add user",
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change user",
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete user",
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user",
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add otp request",
+    "content_type": [
+      "accounts",
+      "otprequest"
+    ],
+    "codename": "add_otprequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change otp request",
+    "content_type": [
+      "accounts",
+      "otprequest"
+    ],
+    "codename": "change_otprequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete otp request",
+    "content_type": [
+      "accounts",
+      "otprequest"
+    ],
+    "codename": "delete_otprequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view otp request",
+    "content_type": [
+      "accounts",
+      "otprequest"
+    ],
+    "codename": "view_otprequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add device",
+    "content_type": [
+      "devices",
+      "device"
+    ],
+    "codename": "add_device"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change device",
+    "content_type": [
+      "devices",
+      "device"
+    ],
+    "codename": "change_device"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete device",
+    "content_type": [
+      "devices",
+      "device"
+    ],
+    "codename": "delete_device"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view device",
+    "content_type": [
+      "devices",
+      "device"
+    ],
+    "codename": "view_device"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add device image",
+    "content_type": [
+      "devices",
+      "deviceimage"
+    ],
+    "codename": "add_deviceimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change device image",
+    "content_type": [
+      "devices",
+      "deviceimage"
+    ],
+    "codename": "change_deviceimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete device image",
+    "content_type": [
+      "devices",
+      "deviceimage"
+    ],
+    "codename": "delete_deviceimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view device image",
+    "content_type": [
+      "devices",
+      "deviceimage"
+    ],
+    "codename": "view_deviceimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add device status history",
+    "content_type": [
+      "devices",
+      "devicestatushistory"
+    ],
+    "codename": "add_devicestatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change device status history",
+    "content_type": [
+      "devices",
+      "devicestatushistory"
+    ],
+    "codename": "change_devicestatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete device status history",
+    "content_type": [
+      "devices",
+      "devicestatushistory"
+    ],
+    "codename": "delete_devicestatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view device status history",
+    "content_type": [
+      "devices",
+      "devicestatushistory"
+    ],
+    "codename": "view_devicestatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add marketplace listing",
+    "content_type": [
+      "marketplace",
+      "marketplacelisting"
+    ],
+    "codename": "add_marketplacelisting"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change marketplace listing",
+    "content_type": [
+      "marketplace",
+      "marketplacelisting"
+    ],
+    "codename": "change_marketplacelisting"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete marketplace listing",
+    "content_type": [
+      "marketplace",
+      "marketplacelisting"
+    ],
+    "codename": "delete_marketplacelisting"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view marketplace listing",
+    "content_type": [
+      "marketplace",
+      "marketplacelisting"
+    ],
+    "codename": "view_marketplacelisting"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add order",
+    "content_type": [
+      "marketplace",
+      "order"
+    ],
+    "codename": "add_order"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change order",
+    "content_type": [
+      "marketplace",
+      "order"
+    ],
+    "codename": "change_order"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete order",
+    "content_type": [
+      "marketplace",
+      "order"
+    ],
+    "codename": "delete_order"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view order",
+    "content_type": [
+      "marketplace",
+      "order"
+    ],
+    "codename": "view_order"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add order status history",
+    "content_type": [
+      "marketplace",
+      "orderstatushistory"
+    ],
+    "codename": "add_orderstatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change order status history",
+    "content_type": [
+      "marketplace",
+      "orderstatushistory"
+    ],
+    "codename": "change_orderstatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete order status history",
+    "content_type": [
+      "marketplace",
+      "orderstatushistory"
+    ],
+    "codename": "delete_orderstatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view order status history",
+    "content_type": [
+      "marketplace",
+      "orderstatushistory"
+    ],
+    "codename": "view_orderstatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add repair assignment",
+    "content_type": [
+      "repairs",
+      "repairassignment"
+    ],
+    "codename": "add_repairassignment"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change repair assignment",
+    "content_type": [
+      "repairs",
+      "repairassignment"
+    ],
+    "codename": "change_repairassignment"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete repair assignment",
+    "content_type": [
+      "repairs",
+      "repairassignment"
+    ],
+    "codename": "delete_repairassignment"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view repair assignment",
+    "content_type": [
+      "repairs",
+      "repairassignment"
+    ],
+    "codename": "view_repairassignment"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add logistics task",
+    "content_type": [
+      "logistics",
+      "logisticstask"
+    ],
+    "codename": "add_logisticstask"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change logistics task",
+    "content_type": [
+      "logistics",
+      "logisticstask"
+    ],
+    "codename": "change_logisticstask"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete logistics task",
+    "content_type": [
+      "logistics",
+      "logisticstask"
+    ],
+    "codename": "delete_logisticstask"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view logistics task",
+    "content_type": [
+      "logistics",
+      "logisticstask"
+    ],
+    "codename": "view_logisticstask"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add task status history",
+    "content_type": [
+      "logistics",
+      "taskstatushistory"
+    ],
+    "codename": "add_taskstatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change task status history",
+    "content_type": [
+      "logistics",
+      "taskstatushistory"
+    ],
+    "codename": "change_taskstatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete task status history",
+    "content_type": [
+      "logistics",
+      "taskstatushistory"
+    ],
+    "codename": "delete_taskstatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view task status history",
+    "content_type": [
+      "logistics",
+      "taskstatushistory"
+    ],
+    "codename": "view_taskstatushistory"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Region",
+    "content_type": [
+      "analytics",
+      "region"
+    ],
+    "codename": "add_region"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Region",
+    "content_type": [
+      "analytics",
+      "region"
+    ],
+    "codename": "change_region"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Region",
+    "content_type": [
+      "analytics",
+      "region"
+    ],
+    "codename": "delete_region"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Region",
+    "content_type": [
+      "analytics",
+      "region"
+    ],
+    "codename": "view_region"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add System Bottleneck Snapshot",
+    "content_type": [
+      "analytics",
+      "systembottlenecksnapshot"
+    ],
+    "codename": "add_systembottlenecksnapshot"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change System Bottleneck Snapshot",
+    "content_type": [
+      "analytics",
+      "systembottlenecksnapshot"
+    ],
+    "codename": "change_systembottlenecksnapshot"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete System Bottleneck Snapshot",
+    "content_type": [
+      "analytics",
+      "systembottlenecksnapshot"
+    ],
+    "codename": "delete_systembottlenecksnapshot"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view System Bottleneck Snapshot",
+    "content_type": [
+      "analytics",
+      "systembottlenecksnapshot"
+    ],
+    "codename": "view_systembottlenecksnapshot"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Device Impact",
+    "content_type": [
+      "analytics",
+      "deviceimpact"
+    ],
+    "codename": "add_deviceimpact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Device Impact",
+    "content_type": [
+      "analytics",
+      "deviceimpact"
+    ],
+    "codename": "change_deviceimpact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Device Impact",
+    "content_type": [
+      "analytics",
+      "deviceimpact"
+    ],
+    "codename": "delete_deviceimpact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Device Impact",
+    "content_type": [
+      "analytics",
+      "deviceimpact"
+    ],
+    "codename": "view_deviceimpact"
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$pfAfXSnbE6IgfmnskQJYs4$R90fQZV40bmyEHC97YM4c+EAABCMzWkA+wQ/CB5Ch9g=",
+    "last_login": "2026-01-12T20:21:54.661Z",
+    "is_superuser": false,
+    "username": "MilindKashyap",
+    "first_name": "",
+    "last_name": "",
+    "email": "kashyapmilind1929@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-12T11:44:48.923Z",
+    "phone_number": "+918077829092",
+    "role": "donor",
+    "otp_verified": true,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$cfYuQShV9E2SoEzLZYqbyg$F1SQ5SqhxYagaWNmSUIYz1I2X1ikfJvMimHlyaWiiLQ=",
+    "last_login": "2026-01-12T21:30:08.788Z",
+    "is_superuser": true,
+    "username": "ShaliniMaam",
+    "first_name": "",
+    "last_name": "",
+    "email": "kashyapmilind0@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-12T11:57:23.187Z",
+    "phone_number": "8979020933",
+    "role": "admin",
+    "otp_verified": true,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$TCKsIb0qLHIFmDg2tFXCG9$xsiX93pUVyVXH9nhOq/W8b7cISOyIP5bUcMl1c9lwCg=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@nayiumeed.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-12T12:01:57.254Z",
+    "phone_number": "+911234567890",
+    "role": "admin",
+    "otp_verified": true,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$ivimc9OdMx2qLrOVt30DjH$DwcJqzr4YedTNQXs5sGUx6PVEXzuCYAXtyoxOfB+r3E=",
+    "last_login": "2026-01-12T20:45:54.952Z",
+    "is_superuser": false,
+    "username": "MK",
+    "first_name": "",
+    "last_name": "",
+    "email": "mk19102025@outlook.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-12T20:23:56.245Z",
+    "phone_number": "9977556644",
+    "role": "buyer",
+    "otp_verified": true,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$brd5XA4aPUrpF4kGTuwuVR$QNqdVN+nV0pIuJ6cG6rP0+H9sIKU2tdvNawYLsYqQBg=",
+    "last_login": "2026-01-12T21:22:13.526Z",
+    "is_superuser": false,
+    "username": "nishantrepairs",
+    "first_name": "",
+    "last_name": "",
+    "email": "mk17273626@outlook.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-12T21:14:00.970Z",
+    "phone_number": "9988775544",
+    "role": "repair_partner",
+    "otp_verified": true,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.otprequest",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "MilindKashyap"
+    ],
+    "code": "436757",
+    "created_at": "2026-01-12T11:44:50.139Z",
+    "is_used": true
+  }
+},
+{
+  "model": "accounts.otprequest",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "ShaliniMaam"
+    ],
+    "code": "428401",
+    "created_at": "2026-01-12T11:57:25.419Z",
+    "is_used": true
+  }
+},
+{
+  "model": "accounts.otprequest",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "MK"
+    ],
+    "code": "472057",
+    "created_at": "2026-01-12T20:23:58.463Z",
+    "is_used": true
+  }
+},
+{
+  "model": "accounts.otprequest",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "nishantrepairs"
+    ],
+    "code": "282845",
+    "created_at": "2026-01-12T21:14:02.535Z",
+    "is_used": true
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 1,
+  "fields": {
+    "title": "portable oxygen concentrator",
+    "description": "nice condition and working",
+    "category": "oxygen_concentrator",
+    "condition": "good",
+    "status": "listed",
+    "admin_approval_status": "approved",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-0C22F646",
+    "price": "20000.00",
+    "created_at": "2026-01-12T12:15:38.784Z",
+    "updated_at": "2026-01-12T20:57:54.489Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 2,
+  "fields": {
+    "title": "wheelchair",
+    "description": "good condition",
+    "category": "wheelchair",
+    "condition": "new",
+    "status": "certified",
+    "admin_approval_status": "approved",
+    "admin_notes": "",
+    "donor": [
+      "MilindKashyap"
+    ],
+    "listing_id": "DEV-C1E9F870",
+    "price": null,
+    "created_at": "2026-01-12T20:18:51.990Z",
+    "updated_at": "2026-01-12T21:10:29.206Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 3,
+  "fields": {
+    "title": "Portable Oxygen Concentrator",
+    "description": "High-quality portable oxygen concentrator, fully tested and certified. Perfect for home use or travel. Includes all accessories and user manual.",
+    "category": "oxygen_concentrator",
+    "condition": "good",
+    "status": "listed",
+    "admin_approval_status": "approved",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-3C25EA4B",
+    "price": "25000.00",
+    "created_at": "2026-01-12T20:51:37.887Z",
+    "updated_at": "2026-01-12T20:51:37.887Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 4,
+  "fields": {
+    "title": "Medical Ventilator System",
+    "description": "Professional-grade medical ventilator system. Recently serviced and certified. Ideal for hospital or clinic use. All safety checks completed.",
+    "category": "ventilator",
+    "condition": "good",
+    "status": "under_inspection",
+    "admin_approval_status": "approved",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-B326E3D2",
+    "price": "150000.00",
+    "created_at": "2026-01-12T20:52:38.844Z",
+    "updated_at": "2026-01-12T21:10:20.492Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 5,
+  "fields": {
+    "title": "ICU Ventilator Unit",
+    "description": "Advanced ICU ventilator with modern features. Fully functional and certified. Includes all necessary components and documentation.",
+    "category": "ventilator",
+    "condition": "good",
+    "status": "listed",
+    "admin_approval_status": "approved",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-B694C352",
+    "price": "180000.00",
+    "created_at": "2026-01-12T20:52:38.974Z",
+    "updated_at": "2026-01-12T20:52:38.974Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 6,
+  "fields": {
+    "title": "Patient Vital Signs Monitor",
+    "description": "Multi-parameter patient monitor for continuous vital signs monitoring. Display shows heart rate, blood pressure, oxygen saturation, and more. Certified and ready for use.",
+    "category": "monitor",
+    "condition": "good",
+    "status": "under_repair",
+    "admin_approval_status": "approved",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-AC24891B",
+    "price": "45000.00",
+    "created_at": "2026-01-12T20:52:39.117Z",
+    "updated_at": "2026-01-12T21:10:08.964Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 7,
+  "fields": {
+    "title": "Wheelchair - Standard Model",
+    "description": "Comfortable and durable standard wheelchair. Lightweight frame, adjustable footrests, and smooth-rolling wheels. Excellent condition, sanitized and ready for use.",
+    "category": "wheelchair",
+    "condition": "good",
+    "status": "listed",
+    "admin_approval_status": "approved",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-3BD4155A",
+    "price": "8000.00",
+    "created_at": "2026-01-12T20:52:39.262Z",
+    "updated_at": "2026-01-12T20:52:39.262Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 8,
+  "fields": {
+    "title": "Digital Blood Pressure Monitor",
+    "description": "Accurate digital blood pressure monitor with large display. Easy to use, includes cuff and instruction manual. Brand new, never used.",
+    "category": "other",
+    "condition": "new",
+    "status": "picked_up",
+    "admin_approval_status": "approved",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-8C93FAA3",
+    "price": "2500.00",
+    "created_at": "2026-01-12T20:52:39.422Z",
+    "updated_at": "2026-01-12T21:10:42.945Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 9,
+  "fields": {
+    "title": "Finger Pulse Oximeter",
+    "description": "Portable finger pulse oximeter for measuring blood oxygen levels and heart rate. Compact design, perfect for home monitoring. New in box.",
+    "category": "other",
+    "condition": "new",
+    "status": "listed",
+    "admin_approval_status": "pending",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-6BD3B519",
+    "price": "1200.00",
+    "created_at": "2026-01-12T20:52:39.537Z",
+    "updated_at": "2026-01-12T21:09:52.795Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 10,
+  "fields": {
+    "title": "Professional Stethoscope",
+    "description": "High-quality medical stethoscope. Excellent acoustic performance. Cleaned and sanitized. Perfect for medical professionals.",
+    "category": "other",
+    "condition": "good",
+    "status": "under_repair",
+    "admin_approval_status": "rejected",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-1D28C43D",
+    "price": "3500.00",
+    "created_at": "2026-01-12T20:52:39.633Z",
+    "updated_at": "2026-01-12T21:21:41.754Z"
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 11,
+  "fields": {
+    "title": "Digital Thermometer",
+    "description": "Fast and accurate digital thermometer. Easy to read display, beep alert, and memory function. New, sealed package.",
+    "category": "other",
+    "condition": "new",
+    "status": "listed",
+    "admin_approval_status": "on_hold",
+    "admin_notes": "",
+    "donor": [
+      "ShaliniMaam"
+    ],
+    "listing_id": "DEV-383B0B02",
+    "price": "500.00",
+    "created_at": "2026-01-12T20:52:39.739Z",
+    "updated_at": "2026-01-12T21:21:33.049Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 1,
+  "fields": {
+    "device": 1,
+    "image": "device_images/DEV-0C22F646/WhatsApp_Image_2026-01-12_at_5.43.28_PM.jpeg",
+    "uploaded_at": "2026-01-12T12:15:38.958Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 2,
+  "fields": {
+    "device": 2,
+    "image": "device_images/DEV-C1E9F870/WhatsApp_Image_2026-01-13_at_1.41.17_AM.jpeg",
+    "uploaded_at": "2026-01-12T20:18:52.510Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 3,
+  "fields": {
+    "device": 3,
+    "image": "device_images/DEV-3C25EA4B/oxygen_concentrator_3MMcoLp.jpeg",
+    "uploaded_at": "2026-01-12T20:51:38.434Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 4,
+  "fields": {
+    "device": 4,
+    "image": "device_images/DEV-B326E3D2/ventilator_1.jpeg",
+    "uploaded_at": "2026-01-12T20:52:38.946Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 5,
+  "fields": {
+    "device": 5,
+    "image": "device_images/DEV-B694C352/ventilator2_.jpeg",
+    "uploaded_at": "2026-01-12T20:52:39.082Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 6,
+  "fields": {
+    "device": 6,
+    "image": "device_images/DEV-AC24891B/patient_monitor_0xrtw9v.jpeg",
+    "uploaded_at": "2026-01-12T20:52:39.228Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 7,
+  "fields": {
+    "device": 7,
+    "image": "device_images/DEV-3BD4155A/wheelchair_YjtI2d4.jpeg",
+    "uploaded_at": "2026-01-12T20:52:39.390Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 8,
+  "fields": {
+    "device": 8,
+    "image": "device_images/DEV-8C93FAA3/blood_pressure_monitor_T3hZiVv.jpeg",
+    "uploaded_at": "2026-01-12T20:52:39.506Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 9,
+  "fields": {
+    "device": 9,
+    "image": "device_images/DEV-6BD3B519/pulse_oximeter_LR5h7b1.jpeg",
+    "uploaded_at": "2026-01-12T20:52:39.603Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 10,
+  "fields": {
+    "device": 10,
+    "image": "device_images/DEV-1D28C43D/stethoscope_jbwvPhh.jpeg",
+    "uploaded_at": "2026-01-12T20:52:39.704Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 11,
+  "fields": {
+    "device": 11,
+    "image": "device_images/DEV-383B0B02/thermometer_lNJTctR.jpeg",
+    "uploaded_at": "2026-01-12T20:52:39.841Z"
+  }
+},
+{
+  "model": "devices.devicestatushistory",
+  "pk": 1,
+  "fields": {
+    "device": 1,
+    "from_status": "submitted",
+    "to_status": "submitted",
+    "note": "Submitted",
+    "changed_at": "2026-01-12T12:15:38.812Z"
+  }
+},
+{
+  "model": "devices.devicestatushistory",
+  "pk": 2,
+  "fields": {
+    "device": 2,
+    "from_status": "submitted",
+    "to_status": "submitted",
+    "note": "Submitted",
+    "changed_at": "2026-01-12T20:18:52.092Z"
+  }
+},
+{
+  "model": "devices.devicestatushistory",
+  "pk": 3,
+  "fields": {
+    "device": 2,
+    "from_status": "certified",
+    "to_status": "listed",
+    "note": "Admin override: ",
+    "changed_at": "2026-01-12T20:21:33.366Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 1,
+  "fields": {
+    "device": 2,
+    "price": "0.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:28:37.075Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 2,
+  "fields": {
+    "device": 1,
+    "price": "20000.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:29:32.346Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 3,
+  "fields": {
+    "device": 3,
+    "price": "25000.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:51:38.447Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 4,
+  "fields": {
+    "device": 4,
+    "price": "150000.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:52:38.960Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 5,
+  "fields": {
+    "device": 5,
+    "price": "180000.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:52:39.096Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 6,
+  "fields": {
+    "device": 6,
+    "price": "45000.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:52:39.245Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 7,
+  "fields": {
+    "device": 7,
+    "price": "8000.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:52:39.405Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 8,
+  "fields": {
+    "device": 8,
+    "price": "2500.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:52:39.521Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 9,
+  "fields": {
+    "device": 9,
+    "price": "1200.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:52:39.617Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 10,
+  "fields": {
+    "device": 10,
+    "price": "3500.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:52:39.720Z"
+  }
+},
+{
+  "model": "marketplace.marketplacelisting",
+  "pk": 11,
+  "fields": {
+    "device": 11,
+    "price": "500.00",
+    "is_active": true,
+    "created_at": "2026-01-12T20:52:39.853Z"
+  }
+},
+{
+  "model": "marketplace.order",
+  "pk": 1,
+  "fields": {
+    "listing": 1,
+    "buyer": [
+      "MK"
+    ],
+    "status": "placed",
+    "shipping_address": "meerut saraswati lok",
+    "created_at": "2026-01-12T20:36:41.997Z",
+    "updated_at": "2026-01-12T20:36:41.997Z"
+  }
+},
+{
+  "model": "marketplace.orderstatushistory",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "status": "placed",
+    "note": "Order placed",
+    "changed_at": "2026-01-12T20:36:42.043Z"
+  }
+},
+{
+  "model": "repairs.repairassignment",
+  "pk": 1,
+  "fields": {
+    "device": 10,
+    "repair_partner": [
+      "nishantrepairs"
+    ],
+    "status": "in_progress",
+    "estimated_completion": "2026-01-15T01:30:00Z",
+    "report_file": "repair_reports/MPIN-Task.pdf",
+    "report_notes": "",
+    "is_certified": false,
+    "certified_at": null,
+    "created_at": "2026-01-12T21:20:51.080Z",
+    "updated_at": "2026-01-12T21:29:40.730Z"
+  }
+}
+]
