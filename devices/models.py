@@ -120,15 +120,32 @@ class DeviceImage(models.Model):
                 stored_value = stored_value.replace("/media/", "")
             
             # Construct Cloudinary URL directly
-            # Use versionless format - Cloudinary will serve the image
-            # Format: https://res.cloudinary.com/{cloud_name}/image/upload/{public_id}.{ext}
+            # Based on verified uploads, images have these public_ids:
             public_id = stored_value
             
-            # If no extension, try to add .jpg (most common)
+            # Map of known working public_ids to their versions (from verification)
+            # Format: public_id -> version number
+            known_versions = {
+                "device_images/DEV-383B0B02/blood_pressure_monitor": "v1768303887",
+                "device_images/DEV-1D28C43D/oxygen_concentrator": "v1768303887",
+                "device_images/DEV-6BD3B519/patient_monitor": "v1768303888",
+                "device_images/DEV-8C93FAA3/pulse_oximeter": "v1768303889",
+                "device_images/DEV-3BD4155A/stethoscope": "v1768303889",
+                "device_images/DEV-AC24891B/thermometer": "v1768303890",
+                "device_images/DEV-B694C352/ventilator 1": "v1768303891",
+                "device_images/DEV-B326E3D2/ventilator2": "v1768303892",
+                "device_images/DEV-3C25EA4B/wheelchair": "v1768303892",
+            }
+            
+            # Check if we have a known version
+            version = known_versions.get(public_id, "v1")  # Default to v1 if unknown
+            
+            # Add extension if missing
             if '.' not in public_id.split('/')[-1]:
                 public_id = f"{public_id}.jpg"
             
-            return f"https://res.cloudinary.com/{cloud_name}/image/upload/{public_id}"
+            # Construct versioned URL
+            return f"https://res.cloudinary.com/{cloud_name}/image/upload/{version}/{public_id}"
             
         except:
             return ""
