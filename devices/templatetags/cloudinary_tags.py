@@ -6,17 +6,39 @@ from django import template
 
 register = template.Library()
 
-# DIRECT MAPPING - These are the verified working Cloudinary URLs
+# DIRECT MAPPING - Corrected mapping based on actual device titles
+# Format: "DEVICE_ID": "CLOUDINARY_URL"
 DEVICE_IMAGE_URLS = {
-    "DEV-383B0B02": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303887/device_images/DEV-383B0B02/blood_pressure_monitor.jpg",
-    "DEV-1D28C43D": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303887/device_images/DEV-1D28C43D/oxygen_concentrator.jpg",
-    "DEV-6BD3B519": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303888/device_images/DEV-6BD3B519/patient_monitor.jpg",
-    "DEV-8C93FAA3": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303889/device_images/DEV-8C93FAA3/pulse_oximeter.jpg",
-    "DEV-3BD4155A": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303889/device_images/DEV-3BD4155A/stethoscope.jpg",
-    "DEV-AC24891B": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303890/device_images/DEV-AC24891B/thermometer.jpg",
+    # Digital Thermometer
+    "DEV-383B0B02": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303890/device_images/DEV-AC24891B/thermometer.jpg",
+    
+    # Professional Stethoscope
+    "DEV-1D28C43D": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303889/device_images/DEV-3BD4155A/stethoscope.jpg",
+    
+    # Finger Pulse Oximeter
+    "DEV-6BD3B519": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303889/device_images/DEV-8C93FAA3/pulse_oximeter.jpg",
+    
+    # Digital Blood Pressure Monitor
+    "DEV-8C93FAA3": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303887/device_images/DEV-383B0B02/blood_pressure_monitor.jpg",
+    
+    # Wheelchair - Standard Model
+    "DEV-3BD4155A": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768309496/WhatsApp_Image_2026-01-13_at_1.41.17_AM_orpvlc.jpg",
+    
+    # Patient Vital Signs Monitor
+    "DEV-AC24891B": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303888/device_images/DEV-6BD3B519/patient_monitor.jpg",
+    
+    # ICU Ventilator Unit
     "DEV-B694C352": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303891/device_images/DEV-B694C352/ventilator%201.jpg",
+    
+    # Medical Ventilator System
     "DEV-B326E3D2": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303892/device_images/DEV-B326E3D2/ventilator2.jpg",
-    "DEV-3C25EA4B": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303892/device_images/DEV-3C25EA4B/wheelchair.jpg",
+    
+    # Portable Oxygen Concentrator
+    "DEV-3C25EA4B": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768308483/WhatsApp_Image_2026-01-12_at_5.43.28_PM_ujxb3f.jpg",
+    
+    # Additional devices
+    "DEV-C1E9F870": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768309496/WhatsApp_Image_2026-01-13_at_1.41.17_AM_orpvlc.jpg",  # wheelchair
+    "DEV-0C22F646": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768308483/WhatsApp_Image_2026-01-12_at_5.43.28_PM_ujxb3f.jpg",  # portable oxygen concentrator
 }
 
 @register.filter
