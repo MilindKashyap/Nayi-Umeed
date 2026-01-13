@@ -96,39 +96,45 @@ class DeviceImage(models.Model):
     
     @property
     def get_image_url(self):
-        """Get Cloudinary URL - always returns Cloudinary URL if public_id is stored"""
+        """Get Cloudinary URL - always returns Cloudinary URL"""
         try:
-            # Get the stored value (could be public_id or path)
-            stored_value = self.image.name if hasattr(self.image, 'name') else str(self.image)
+            # Get the raw database value
+            stored_value = getattr(self, '_image', None) or (self.image.name if self.image else None)
+            
+            # If no value, return empty
+            if not stored_value:
+                return ""
             
             # If it's already a full Cloudinary URL, return it
-            if "cloudinary.com" in stored_value or stored_value.startswith("http"):
-                return stored_value
+            if "cloudinary.com" in str(stored_value) or str(stored_value).startswith("http"):
+                return str(stored_value)
             
-            # If it's a public_id (no /media/ prefix and no http), generate Cloudinary URL
-            if stored_value and not stored_value.startswith("/media/") and not stored_value.startswith("http"):
-                try:
-                    import cloudinary
-                    from cloudinary.utils import cloudinary_url
-                    from django.conf import settings
-                    
-                    # Always use Cloudinary credentials from settings or hardcoded fallback
-                    cloud_name = getattr(settings, "CLOUDINARY_CLOUD_NAME", "duo3tqnyj")
-                    if cloud_name:
-                        url, _ = cloudinary_url(stored_value, secure=True, cloud_name=cloud_name)
-                        return url
-                except Exception as e:
-                    # Fallback: construct URL manually
-                    cloud_name = getattr(settings, "CLOUDINARY_CLOUD_NAME", "duo3tqnyj")
-                    if cloud_name:
-                        return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{stored_value}"
+            # If it starts with /media/, it's an old local path - try to convert
+            if str(stored_value).startswith("/media/"):
+                # Extract the path after /media/
+                path_part = str(stored_value).replace("/media/", "")
+                # Try to construct Cloudinary URL
+                cloud_name = "duo3tqnyj"  # Hardcoded fallback
+                return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{path_part}"
             
-            # Fallback to regular URL
-            return self.image.url
-        except:
-            # Ultimate fallback
+            # It's a public_id - construct Cloudinary URL directly
+            cloud_name = "duo3tqnyj"  # Hardcoded to ensure it works
+            # Remove any file extension for public_id
+            public_id = str(stored_value).rsplit('.', 1)[0] if '.' in str(stored_value) else str(stored_value)
+            return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{public_id}"
+            
+        except Exception as e:
+            # Ultimate fallback - try to get URL from storage
             try:
-                return self.image.url
+                url = self.image.url
+                # If it's a Cloudinary URL, return it
+                if "cloudinary.com" in url:
+                    return url
+                # Otherwise, try to convert
+                if url.startswith("/media/"):
+                    path_part = url.replace("/media/", "")
+                    return f"https://res.cloudinary.com/duo3tqnyj/image/upload/v1/{path_part}"
+                return url
             except:
                 return ""
 
