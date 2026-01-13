@@ -97,46 +97,55 @@ class DeviceImage(models.Model):
     @property
     def get_image_url(self):
         """Get Cloudinary URL - always returns Cloudinary URL"""
+        cloud_name = "duo3tqnyj"  # Hardcoded to ensure it works
+        
         try:
-            # Get the raw database value
-            stored_value = getattr(self, '_image', None) or (self.image.name if self.image else None)
+            # Get the stored value from database
+            stored_value = self.image.name if self.image else None
             
-            # If no value, return empty
             if not stored_value:
                 return ""
             
+            stored_value = str(stored_value)
+            
             # If it's already a full Cloudinary URL, return it
-            if "cloudinary.com" in str(stored_value) or str(stored_value).startswith("http"):
-                return str(stored_value)
+            if "cloudinary.com" in stored_value or stored_value.startswith("http"):
+                return stored_value
             
-            # If it starts with /media/, it's an old local path - try to convert
-            if str(stored_value).startswith("/media/"):
-                # Extract the path after /media/
-                path_part = str(stored_value).replace("/media/", "")
-                # Try to construct Cloudinary URL
-                cloud_name = "duo3tqnyj"  # Hardcoded fallback
-                return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{path_part}"
+            # Clean up duplicate paths (fix for old uploads)
+            if "nayi_umeed/device_images/nayi_umeed/device_images" in stored_value:
+                stored_value = stored_value.replace("nayi_umeed/device_images/nayi_umeed/device_images/", "device_images/")
             
-            # It's a public_id - construct Cloudinary URL directly
-            cloud_name = "duo3tqnyj"  # Hardcoded to ensure it works
-            # Remove any file extension for public_id
-            public_id = str(stored_value).rsplit('.', 1)[0] if '.' in str(stored_value) else str(stored_value)
-            return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{public_id}"
+            # If it starts with /media/, extract the path
+            if stored_value.startswith("/media/"):
+                stored_value = stored_value.replace("/media/", "")
+            
+            # Remove file extension if present (Cloudinary public_id shouldn't have extension)
+            if '.' in stored_value:
+                # Keep the path structure but remove extension
+                parts = stored_value.rsplit('.', 1)
+                if len(parts) == 2 and parts[1] in ['jpg', 'jpeg', 'png', 'gif', 'webp']:
+                    stored_value = parts[0]
+            
+            # Construct Cloudinary URL
+            return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{stored_value}"
             
         except Exception as e:
-            # Ultimate fallback - try to get URL from storage
+            # Fallback: try to use image.url and convert if needed
             try:
-                url = self.image.url
-                # If it's a Cloudinary URL, return it
-                if "cloudinary.com" in url:
-                    return url
-                # Otherwise, try to convert
-                if url.startswith("/media/"):
-                    path_part = url.replace("/media/", "")
-                    return f"https://res.cloudinary.com/duo3tqnyj/image/upload/v1/{path_part}"
-                return url
+                if self.image:
+                    url = self.image.url
+                    if "cloudinary.com" in url:
+                        return url
+                    if url.startswith("/media/"):
+                        path = url.replace("/media/", "")
+                        # Clean duplicate paths
+                        if "nayi_umeed/device_images/nayi_umeed/device_images" in path:
+                            path = path.replace("nayi_umeed/device_images/nayi_umeed/device_images/", "device_images/")
+                        return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{path}"
             except:
-                return ""
+                pass
+            return ""
 
 
 class DeviceStatusHistory(models.Model):
