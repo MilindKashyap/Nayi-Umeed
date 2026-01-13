@@ -1205,101 +1205,92 @@
 },
 {
   "model": "devices.deviceimage",
-  "pk": 1,
-  "fields": {
-    "device": 1,
-    "image": "device_images/DEV-0C22F646/WhatsApp_Image_2026-01-12_at_5.43.28_PM.jpeg",
-    "uploaded_at": "2026-01-12T12:15:38.958Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 2,
+  "pk": 46,
   "fields": {
     "device": 2,
-    "image": "device_images/DEV-C1E9F870/WhatsApp_Image_2026-01-13_at_1.41.17_AM.jpeg",
-    "uploaded_at": "2026-01-12T20:18:52.510Z"
+    "image": "nayi_umeed/device_images/nayi_umeed/device_images/DEV-C1E9F870/wheelchair",
+    "uploaded_at": "2026-01-13T11:31:03.740Z"
   }
 },
 {
   "model": "devices.deviceimage",
-  "pk": 3,
-  "fields": {
-    "device": 3,
-    "image": "device_images/DEV-3C25EA4B/oxygen_concentrator_3MMcoLp.jpeg",
-    "uploaded_at": "2026-01-12T20:51:38.434Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 4,
-  "fields": {
-    "device": 4,
-    "image": "device_images/DEV-B326E3D2/ventilator_1.jpeg",
-    "uploaded_at": "2026-01-12T20:52:38.946Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 5,
-  "fields": {
-    "device": 5,
-    "image": "device_images/DEV-B694C352/ventilator2_.jpeg",
-    "uploaded_at": "2026-01-12T20:52:39.082Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 6,
-  "fields": {
-    "device": 6,
-    "image": "device_images/DEV-AC24891B/patient_monitor_0xrtw9v.jpeg",
-    "uploaded_at": "2026-01-12T20:52:39.228Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 7,
-  "fields": {
-    "device": 7,
-    "image": "device_images/DEV-3BD4155A/wheelchair_YjtI2d4.jpeg",
-    "uploaded_at": "2026-01-12T20:52:39.390Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 8,
-  "fields": {
-    "device": 8,
-    "image": "device_images/DEV-8C93FAA3/blood_pressure_monitor_T3hZiVv.jpeg",
-    "uploaded_at": "2026-01-12T20:52:39.506Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 9,
-  "fields": {
-    "device": 9,
-    "image": "device_images/DEV-6BD3B519/pulse_oximeter_LR5h7b1.jpeg",
-    "uploaded_at": "2026-01-12T20:52:39.603Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 10,
-  "fields": {
-    "device": 10,
-    "image": "device_images/DEV-1D28C43D/stethoscope_jbwvPhh.jpeg",
-    "uploaded_at": "2026-01-12T20:52:39.704Z"
-  }
-},
-{
-  "model": "devices.deviceimage",
-  "pk": 11,
+  "pk": 47,
   "fields": {
     "device": 11,
-    "image": "device_images/DEV-383B0B02/thermometer_lNJTctR.jpeg",
-    "uploaded_at": "2026-01-12T20:52:39.841Z"
+    "image": "device_images/DEV-383B0B02/blood_pressure_monitor",
+    "uploaded_at": "2026-01-13T11:31:29.390Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 48,
+  "fields": {
+    "device": 10,
+    "image": "device_images/DEV-1D28C43D/oxygen_concentrator",
+    "uploaded_at": "2026-01-13T11:31:30.264Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 49,
+  "fields": {
+    "device": 9,
+    "image": "device_images/DEV-6BD3B519/patient_monitor",
+    "uploaded_at": "2026-01-13T11:31:30.997Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 50,
+  "fields": {
+    "device": 8,
+    "image": "device_images/DEV-8C93FAA3/pulse_oximeter",
+    "uploaded_at": "2026-01-13T11:31:31.611Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 51,
+  "fields": {
+    "device": 7,
+    "image": "device_images/DEV-3BD4155A/stethoscope",
+    "uploaded_at": "2026-01-13T11:31:32.259Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 52,
+  "fields": {
+    "device": 6,
+    "image": "device_images/DEV-AC24891B/thermometer",
+    "uploaded_at": "2026-01-13T11:31:33.086Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 53,
+  "fields": {
+    "device": 5,
+    "image": "device_images/DEV-B694C352/ventilator 1",
+    "uploaded_at": "2026-01-13T11:31:33.848Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 54,
+  "fields": {
+    "device": 4,
+    "image": "device_images/DEV-B326E3D2/ventilator2",
+    "uploaded_at": "2026-01-13T11:31:34.556Z"
+  }
+},
+{
+  "model": "devices.deviceimage",
+  "pk": 55,
+  "fields": {
+    "device": 3,
+    "image": "device_images/DEV-3C25EA4B/wheelchair",
+    "uploaded_at": "2026-01-13T11:31:35.309Z"
   }
 },
 {
