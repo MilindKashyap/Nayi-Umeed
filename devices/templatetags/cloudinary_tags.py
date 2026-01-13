@@ -48,12 +48,21 @@ def cloudinary_url_by_device(device_image):
         return ""
     
     try:
+        # Get device listing_id
         device_id = device_image.device.listing_id
-        # Check direct mapping first
+        
+        # Check direct mapping first (TEMPORARY FIX - these are verified working URLs)
         if device_id in DEVICE_IMAGE_URLS:
             return DEVICE_IMAGE_URLS[device_id]
         
-        # Fallback to property
-        return device_image.get_image_url
-    except:
+        # Fallback: try the property method
+        if hasattr(device_image, 'get_image_url'):
+            url = device_image.get_image_url
+            if url and url.startswith('http'):
+                return url
+        
+        # Last resort: return empty
+        return ""
+    except Exception as e:
+        # In production, you might want to log this
         return ""
