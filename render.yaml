@@ -17,8 +17,8 @@ services:
         generateValue: true
       - key: DJANGO_DEBUG
         value: False
-      - key: ALLOWED_HOSTS
-        value: nayi-umeed.onrender.com,localhost,127.0.0.1  # Update with your actual Render URL after deployment
+      - key: DJANGO_ALLOWED_HOSTS
+        value: nayi-umeed.onrender.com,localhost,127.0.0.1
       
       # Database Configuration (automatically connected)
       - key: DATABASE_URL
