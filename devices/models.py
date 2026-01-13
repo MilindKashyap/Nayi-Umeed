@@ -93,6 +93,27 @@ class DeviceImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.device.listing_id}"
+    
+    def get_image_url(self):
+        """Get Cloudinary URL if image is stored there, otherwise return regular URL"""
+        image_url = self.image.url
+        # If it's already a Cloudinary URL, return it
+        if "cloudinary.com" in image_url:
+            return image_url
+        # If it's a public_id (no /media/ prefix), generate Cloudinary URL
+        if not image_url.startswith("/media/"):
+            try:
+                import cloudinary
+                from cloudinary.utils import cloudinary_url
+                from django.conf import settings
+                # Check if Cloudinary is configured
+                if (getattr(settings, "CLOUDINARY_CLOUD_NAME", None) and 
+                    getattr(settings, "CLOUDINARY_API_KEY", None)):
+                    url, _ = cloudinary_url(image_url, secure=True)
+                    return url
+            except:
+                pass
+        return image_url
 
 
 class DeviceStatusHistory(models.Model):
