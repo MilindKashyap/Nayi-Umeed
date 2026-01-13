@@ -9,31 +9,31 @@ register = template.Library()
 # DIRECT MAPPING - Corrected mapping based on actual device titles
 # Format: "DEVICE_ID": "CLOUDINARY_URL"
 DEVICE_IMAGE_URLS = {
-    # Digital Thermometer
+    # Digital Thermometer -> thermometer image
     "DEV-383B0B02": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303890/device_images/DEV-AC24891B/thermometer.jpg",
     
-    # Professional Stethoscope
+    # Professional Stethoscope -> stethoscope image
     "DEV-1D28C43D": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303889/device_images/DEV-3BD4155A/stethoscope.jpg",
     
-    # Finger Pulse Oximeter
+    # Finger Pulse Oximeter -> pulse_oximeter image
     "DEV-6BD3B519": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303889/device_images/DEV-8C93FAA3/pulse_oximeter.jpg",
     
-    # Digital Blood Pressure Monitor
+    # Digital Blood Pressure Monitor -> blood_pressure_monitor image
     "DEV-8C93FAA3": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303887/device_images/DEV-383B0B02/blood_pressure_monitor.jpg",
     
-    # Wheelchair - Standard Model
+    # Wheelchair - Standard Model -> wheelchair image (NEW)
     "DEV-3BD4155A": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768309496/WhatsApp_Image_2026-01-13_at_1.41.17_AM_orpvlc.jpg",
     
-    # Patient Vital Signs Monitor
+    # Patient Vital Signs Monitor -> patient_monitor image
     "DEV-AC24891B": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303888/device_images/DEV-6BD3B519/patient_monitor.jpg",
     
-    # ICU Ventilator Unit
+    # ICU Ventilator Unit -> ventilator 1 image
     "DEV-B694C352": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303891/device_images/DEV-B694C352/ventilator%201.jpg",
     
-    # Medical Ventilator System
+    # Medical Ventilator System -> ventilator2 image
     "DEV-B326E3D2": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768303892/device_images/DEV-B326E3D2/ventilator2.jpg",
     
-    # Portable Oxygen Concentrator
+    # Portable Oxygen Concentrator -> portable oxygen concentrator image (NEW)
     "DEV-3C25EA4B": "https://res.cloudinary.com/duo3tqnyj/image/upload/v1768308483/WhatsApp_Image_2026-01-12_at_5.43.28_PM_ujxb3f.jpg",
     
     # Additional devices
