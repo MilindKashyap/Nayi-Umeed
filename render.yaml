@@ -33,6 +33,15 @@ services:
       # Timezone
       - key: TZ
         value: Asia/Kolkata
+      
+      # Cloudinary Configuration (for media file storage)
+      # Get these from https://cloudinary.com/console
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false  # You need to set this manually in Render dashboard
+      - key: CLOUDINARY_API_KEY
+        sync: false  # You need to set this manually in Render dashboard
+      - key: CLOUDINARY_API_SECRET
+        sync: false  # You need to set this manually in Render dashboard
 
 databases:
   # PostgreSQL Database
