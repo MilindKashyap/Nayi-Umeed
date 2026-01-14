@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}Contact Us - Nayi Umeed{% endblock %}
+{% block content %}
+<!-- Header Section -->
+<div class="text-center mb-4" style="padding: var(--spacing-3xl) 0 var(--spacing-xl) 0;">
+  <h1 style="font-size: var(--font-size-4xl); margin-bottom: var(--spacing-md); color: var(--gray-900); font-weight: 700;">
+    Send Us a Message
+  </h1>
+  <p style="font-size: var(--font-size-lg); color: var(--gray-600); max-width: 700px; margin: 0 auto;">
+    Fill out the form below and we'll respond within 24-48 hours.
+  </p>
+</div>
+
+<!-- Contact Form Card -->
+<div class="card" style="max-width: 900px; margin: 0 auto;">
+  <div style="margin-bottom: var(--spacing-xl);">
+    <h2 style="color: var(--secondary); margin-bottom: var(--spacing-sm); font-size: var(--font-size-2xl);">
+      Contact Form
+    </h2>
+    <p style="color: var(--gray-600); font-size: var(--font-size-base); margin: 0;">
+      We'd love to hear from you
+    </p>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    
+    <!-- Display form errors at the top if any -->
+    {% if form.non_field_errors %}
+      <div class="alert alert-error" style="margin-bottom: var(--spacing-lg);">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <!-- Name and Email Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="{{ form.name.id_for_label }}" class="form-label">
+          Name <span style="color: var(--error);">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="{{ form.name.id_for_label }}"
+          name="{{ form.name.name }}"
+          class="form-control {% if form.name.errors %}error{% endif %}"
+          placeholder="Your full name"
+          value="{{ form.name.value|default:'' }}"
+          required
+        >
+        {% if form.name.errors %}
+          <div style="color: var(--error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+            {{ form.name.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+      
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="{{ form.email.id_for_label }}" class="form-label">
+          Email <span style="color: var(--error);">*</span>
+        </label>
+        <input 
+          type="email" 
+          id="{{ form.email.id_for_label }}"
+          name="{{ form.email.name }}"
+          class="form-control {% if form.email.errors %}error{% endif %}"
+          placeholder="your.email@example.com"
+          value="{{ form.email.value|default:'' }}"
+          required
+        >
+        {% if form.email.errors %}
+          <div style="color: var(--error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+            {{ form.email.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Phone and Subject Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+      <!-- Phone Field -->
+      <div class="form-group">
+        <label for="{{ form.phone.id_for_label }}" class="form-label">
+          Phone <span style="color: var(--gray-500); font-weight: 400;">(Optional)</span>
+        </label>
+        <input 
+          type="tel" 
+          id="{{ form.phone.id_for_label }}"
+          name="{{ form.phone.name }}"
+          class="form-control {% if form.phone.errors %}error{% endif %}"
+          placeholder="+91 123 456 7890"
+          value="{{ form.phone.value|default:'' }}"
+        >
+        {% if form.phone.errors %}
+          <div style="color: var(--error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+            {{ form.phone.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+      
+      <!-- Subject Field -->
+      <div class="form-group">
+        <label for="{{ form.subject.id_for_label }}" class="form-label">
+          Subject <span style="color: var(--error);">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="{{ form.subject.id_for_label }}"
+          name="{{ form.subject.name }}"
+          class="form-control {% if form.subject.errors %}error{% endif %}"
+          placeholder="What is this regarding?"
+          value="{{ form.subject.value|default:'' }}"
+          required
+        >
+        {% if form.subject.errors %}
+          <div style="color: var(--error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+            {{ form.subject.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Message Field -->
+    <div class="form-group" style="margin-bottom: var(--spacing-xl);">
+      <label for="{{ form.message.id_for_label }}" class="form-label">
+        Message <span style="color: var(--error);">*</span>
+      </label>
+      <textarea 
+        id="{{ form.message.id_for_label }}"
+        name="{{ form.message.name }}"
+        class="form-control {% if form.message.errors %}error{% endif %}"
+        placeholder="Tell us more about your inquiry..."
+        rows="6"
+        required
+      >{{ form.message.value|default:'' }}</textarea>
+      {% if form.message.errors %}
+        <div style="color: var(--error); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+          {{ form.message.errors.0 }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-success btn-full" style="display: flex; align-items: center; justify-content: center; gap: var(--spacing-sm);">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+        <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Send Message</span>
+    </button>
+  </form>
+</div>
+
+<!-- Additional Contact Information -->
+<div class="card" style="max-width: 900px; margin: var(--spacing-2xl) auto 0 auto; background: var(--bg-gradient-primary);">
+  <div class="grid grid-cols-1 md:grid-cols-2" style="gap: var(--spacing-xl);">
+    <div>
+      <h3 style="color: var(--primary); margin-bottom: var(--spacing-md);">Get in Touch</h3>
+      <p style="color: var(--gray-700); line-height: 1.8; margin-bottom: var(--spacing-lg);">
+        Have a question or need assistance? We're here to help. Reach out to us through the form above or use the contact information below.
+      </p>
+    </div>
+    
+    <div style="padding: var(--spacing-lg); background: var(--white); border-radius: var(--radius-md); border-left: 4px solid var(--primary);">
+      <p style="margin: 0 0 var(--spacing-sm) 0; color: var(--gray-700);">
+        <strong style="color: var(--primary);">Email:</strong> 
+        <a href="mailto:nayiumeed08@gmail.com" style="color: var(--primary); text-decoration: none;">nayiumeed08@gmail.com</a>
+      </p>
+      <p style="margin: 0; color: var(--gray-700);">
+        <strong style="color: var(--primary);">Phone:</strong> 
+        <a href="tel:9999376650" style="color: var(--primary); text-decoration: none;">9999376650</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Error state for form fields */
+  .form-control.error {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  }
+  
+  .form-control.error:focus {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+  }
+</style>
+{% endblock %}

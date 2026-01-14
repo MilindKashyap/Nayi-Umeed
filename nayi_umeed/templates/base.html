@@ -701,6 +701,7 @@
       </a>
       <ul class="navbar-nav">
         <li><a href="{% url 'pages:about' %}" class="{% if 'about' in request.path %}active{% endif %}">About Us</a></li>
+        <li><a href="{% url 'pages:contact' %}" class="{% if 'contact' in request.path %}active{% endif %}">Contact Us</a></li>
         <li><a href="{% url 'accounts:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a></li>
         {% if user.is_authenticated and user.role != 'repair_partner' %}
           <li><a href="{% url 'devices:my_devices' %}" class="{% if 'devices' in request.path %}active{% endif %}">My Devices</a></li>
