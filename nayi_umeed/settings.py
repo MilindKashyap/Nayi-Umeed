@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "logistics.apps.LogisticsConfig",
     "analytics.apps.AnalyticsConfig",
     "adminpanel.apps.AdminpanelConfig",
+    "pages.apps.PagesConfig",
 ]
 
 MIDDLEWARE = [

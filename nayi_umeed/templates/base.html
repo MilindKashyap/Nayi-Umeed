@@ -33,6 +33,7 @@
        --tertiary: #F59E0B;
        --tertiary-light: #FBBF24;
        --tertiary-dark: #D97706;
+       --tertiary-gradient: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
        
        /* Neutrals - White dominant */
        --white: #FFFFFF;
@@ -699,6 +700,7 @@
         <span>Nayi Umeed</span>
       </a>
       <ul class="navbar-nav">
+        <li><a href="{% url 'pages:about' %}" class="{% if 'about' in request.path %}active{% endif %}">About Us</a></li>
         <li><a href="{% url 'accounts:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a></li>
         {% if user.is_authenticated and user.role != 'repair_partner' %}
           <li><a href="{% url 'devices:my_devices' %}" class="{% if 'devices' in request.path %}active{% endif %}">My Devices</a></li>
