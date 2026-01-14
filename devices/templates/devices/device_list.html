@@ -3,62 +3,139 @@
 {% block title %}My Devices - Nayi Umeed{% endblock %}
 {% block content %}
 <div style="margin-bottom: var(--spacing-2xl);">
-  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-lg);">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--spacing-lg);">
     <div>
       <h1 style="margin-bottom: var(--spacing-sm);">My Devices</h1>
       <p style="color: var(--gray-600); font-size: var(--font-size-lg);">Track your donated devices and their status</p>
     </div>
-    <a href="{% url 'devices:create' %}" class="btn btn-success">
-      + Add New Device
-    </a>
+    <div style="display: flex; gap: var(--spacing-md); align-items: center; flex-wrap: wrap;">
+      <div style="color: var(--gray-600); font-size: var(--font-size-base); padding: var(--spacing-sm) var(--spacing-lg); background: var(--gray-50); border-radius: var(--radius-md);">
+        <strong>{{ devices|length }}</strong> device{{ devices|length|pluralize }}
+      </div>
+      <a href="{% url 'devices:create' %}" class="btn btn-success">
+        + Add New Device
+      </a>
+    </div>
   </div>
 </div>
 
 {% if devices %}
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style="gap: var(--spacing-xl);">
     {% for device in devices %}
-      <div class="card" style="padding: 0; overflow: hidden;">
-        {% if device.images.first %}
-          <div style="width: 100%; height: 180px; overflow: hidden; background: var(--gray-100); display: flex; align-items: center; justify-content: center;">
-            <img src="{{ device.images.first|cloudinary_url_by_device }}" alt="{{ device.title }}" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;" loading="lazy">
-          </div>
-        {% else %}
-          <div style="width: 100%; height: 180px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; color: var(--gray-400);">
-            No Image
-          </div>
-        {% endif %}
-        
-        <div style="padding: var(--spacing-lg);">
-          <h3 style="font-size: var(--font-size-xl); margin-bottom: var(--spacing-sm);">{{ device.title }}</h3>
+      <div class="card" style="padding: 0; overflow: hidden; position: relative; transition: all 0.3s ease;">
+        <!-- Image Container -->
+        <div style="position: relative; width: 100%; height: 240px; overflow: hidden; background: var(--gray-100);">
+          {% if device.images.first %}
+            <img src="{{ device.images.first|cloudinary_url_by_device }}" 
+                 alt="{{ device.title }}" 
+                 style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform 0.3s ease;" 
+                 loading="lazy"
+                 onmouseover="this.style.transform='scale(1.05)'"
+                 onmouseout="this.style.transform='scale(1)'">
+          {% else %}
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--gray-400); background: var(--gray-100);">
+              <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              </svg>
+            </div>
+          {% endif %}
           
+          <!-- Status Badge Overlay -->
+          <div style="position: absolute; top: 12px; right: 12px;">
+            <span class="badge 
+              {% if device.status == 'allocated' %}badge-success
+              {% elif device.status == 'certified' or device.status == 'listed' %}badge-primary
+              {% elif device.status == 'under_repair' or device.status == 'under_inspection' %}badge-warning
+              {% else %}badge-secondary{% endif %}"
+              style="font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
+              {{ device.get_status_display }}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div style="padding: var(--spacing-lg);">
+          <!-- Title -->
+          <h3 style="font-size: var(--font-size-lg); font-weight: 600; margin-bottom: var(--spacing-sm); color: var(--gray-900); line-height: 1.3;">
+            {{ device.title }}
+          </h3>
+          
+          <!-- Category Badge -->
           <div style="margin-bottom: var(--spacing-md);">
-            <div style="margin-bottom: var(--spacing-xs);">
-              <span class="badge badge-primary" style="margin-right: var(--spacing-xs);">{{ device.get_category_display }}</span>
-              <span class="badge 
-                {% if device.status == 'allocated' %}badge-success
-                {% elif device.status == 'certified' or device.status == 'listed' %}badge-primary
-                {% elif device.status == 'under_repair' or device.status == 'under_inspection' %}badge-warning
-                {% else %}badge-secondary{% endif %}">
+            <span class="badge badge-primary" style="font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 0.5px;">
+              {{ device.get_category_display }}
+            </span>
+          </div>
+          
+          <!-- Rating/Status Row -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-sm);">
+            <!-- Rating Stars (based on condition) -->
+            <div style="display: flex; gap: 2px;">
+              {% if device.condition == 'new' %}
+                {% for i in "12345" %}
+                  <svg width="14" height="14" fill="{% if forloop.counter <= 5 %}var(--error){% else %}var(--gray-300){% endif %}" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                {% endfor %}
+              {% elif device.condition == 'good' %}
+                {% for i in "12345" %}
+                  <svg width="14" height="14" fill="{% if forloop.counter <= 4 %}var(--error){% else %}var(--gray-300){% endif %}" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                {% endfor %}
+              {% else %}
+                {% for i in "12345" %}
+                  <svg width="14" height="14" fill="{% if forloop.counter <= 3 %}var(--warning){% else %}var(--gray-300){% endif %}" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+          
+          <!-- Availability/Status -->
+          <div style="margin-bottom: var(--spacing-md);">
+            {% if device.admin_approval_status != 'approved' %}
+              <span style="color: var(--warning); font-size: var(--font-size-sm); font-weight: 600;">
+                {{ device.get_admin_approval_status_display }}
+              </span>
+            {% elif device.status == 'allocated' %}
+              <span style="color: var(--success); font-size: var(--font-size-sm); font-weight: 600;">
+                Allocated
+              </span>
+            {% elif device.status == 'listed' %}
+              <span style="color: var(--success); font-size: var(--font-size-sm); font-weight: 600;">
+                Listed on Marketplace
+              </span>
+            {% elif device.status == 'certified' %}
+              <span style="color: var(--info); font-size: var(--font-size-sm); font-weight: 600;">
+                Certified & Ready
+              </span>
+            {% else %}
+              <span style="color: var(--gray-600); font-size: var(--font-size-sm); font-weight: 600;">
                 {{ device.get_status_display }}
               </span>
-            </div>
-            <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-bottom: var(--spacing-xs);">
-              <strong>ID:</strong> {{ device.listing_id }}
-            </div>
-            {% if device.admin_approval_status != 'approved' %}
-              <div style="margin-top: var(--spacing-xs);">
-                <span class="badge 
-                  {% if device.admin_approval_status == 'pending' %}badge-warning
-                  {% elif device.admin_approval_status == 'rejected' %}badge-error
-                  {% elif device.admin_approval_status == 'on_hold' %}badge-warning
-                  {% endif %}">
-                  Approval: {{ device.get_admin_approval_status_display }}
-                </span>
-              </div>
             {% endif %}
           </div>
           
-          <a href="{% url 'devices:detail' device.pk %}" class="btn btn-primary btn-full" style="text-decoration: none; text-align: center;">
+          <!-- Device ID and Info -->
+          <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--spacing-lg); padding-top: var(--spacing-md); border-top: 1px solid var(--gray-200);">
+            <div>
+              <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-bottom: var(--spacing-xs);">
+                <strong>ID:</strong> {{ device.listing_id }}
+              </div>
+              {% if device.condition %}
+                <span class="badge badge-success" style="font-size: var(--font-size-xs); margin-top: var(--spacing-xs); display: inline-block;">
+                  {{ device.get_condition_display }}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          
+          <!-- View Details Button -->
+          <a href="{% url 'devices:detail' device.pk %}" 
+             class="btn btn-primary btn-full" 
+             style="text-decoration: none; text-align: center; display: block;">
             View Details
           </a>
         </div>
